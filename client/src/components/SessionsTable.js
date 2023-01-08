@@ -6,17 +6,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { NavLink as Link} from 'react-router-dom';
 
 
 export default function SessionsTable({sessions}) {
 
-  function createData(name, user, date) {
-    return { name, user, date};
+  function createData(name, user, date, games, id) {
+    return { name, user, date, games, id};
   }
   
   const sessionRows = sessions.map(session => {
-    return createData(session.name, session.user.username, session.created_at)
+    return createData(session.name, session.user.username, session.created_at, session.games.length, session.id)
   })
+
+  
 
   return (
     <TableContainer component={Paper}>
@@ -26,6 +29,7 @@ export default function SessionsTable({sessions}) {
             <TableCell>Session Name</TableCell>
             <TableCell align="right">Created By</TableCell>
             <TableCell align="right">Creation Date</TableCell>
+            <TableCell align="right">Game Count</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -35,10 +39,11 @@ export default function SessionsTable({sessions}) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+              <Link style={{color:"blue"}} to={`/sessions/${row.id}`}>{row.name}</Link>
               </TableCell>
               <TableCell align="right">{row.user}</TableCell>
               <TableCell align="right">{row.date}</TableCell>
+              <TableCell align="right">{row.games}</TableCell>
             </TableRow>
           ))}
         </TableBody>

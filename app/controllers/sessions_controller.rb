@@ -4,5 +4,9 @@ class SessionsController < ApplicationController
         sessions = Session.all
         render json: sessions, status: :ok
     end
-    
+
+    def show
+        byebug
+    end
+
 end

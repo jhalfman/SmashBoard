@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
-import Route1 from './components/Route1';
+import Sessions from './components/Sessions';
 import Route2 from './components/Route2';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 
@@ -10,9 +10,10 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path='/route1' element={<Route1 />}/>
+        <Route path='/sessions' element={<Sessions />}/>
         <Route path='/route2' element={<Route2 />}/>
       </Routes>
+      
     </div>
   );
 }

@@ -4,7 +4,7 @@ import Sessions from './Sessions'
 const Home = () => {
   return (
     <div>
-      <Sessions />
+      Home
     </div>
   )
 }
