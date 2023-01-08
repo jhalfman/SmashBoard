@@ -115,10 +115,10 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Link to="/sessions">
+            <Link to="/nights">
                 <Button variant="contained"
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}>Sessions</Button>
+                sx={{ my: 2, color: 'white', display: 'block' }}>Nights</Button>
             </Link>
             <Link to="/route2">
                 <Button variant="contained"

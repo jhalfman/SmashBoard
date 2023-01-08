@@ -3,7 +3,7 @@ class CreateGames < ActiveRecord::Migration[6.1]
     create_table :games do |t|
       t.integer :time
       t.string :notes
-      t.belongs_to :session, null: false, foreign_key: true
+      t.belongs_to :night, null: false, foreign_key: true
 
       t.timestamps
     end

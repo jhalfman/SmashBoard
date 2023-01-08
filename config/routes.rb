@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :penalties
   resources :player_character_games
   resources :games
-  resources :sessions
+  resources :nights
   resources :users
   resources :rules
   resources :player_characters

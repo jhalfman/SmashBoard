@@ -10,22 +10,22 @@ import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 
 
-export default function SessionsTable() {
+export default function NightsTable() {
 
-  const [sessions, setSessions] = useState([])
+  const [nights, setNights] = useState([])
 
     useEffect(() => {
-        fetch("/sessions")
+        fetch("/nights")
         .then(resp => resp.json())
-        .then(data => setSessions(data))
+        .then(data => setNights(data))
       }, [])
 
   function createData(name, user, date, games, id) {
     return { name, user, date, games, id};
   }
   
-  const sessionRows = sessions.map(session => {
-    return createData(session.name, session.user.username, session.created_at, session.games.length, session.id)
+  const nightRows = nights.map(night => {
+    return createData(night.name, night.user.username, night.created_at, night.games.length, night.id)
   })
 
   
@@ -35,20 +35,20 @@ export default function SessionsTable() {
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Session Name</TableCell>
+            <TableCell>Event Name</TableCell>
             <TableCell align="right">Created By</TableCell>
             <TableCell align="right">Creation Date</TableCell>
             <TableCell align="right">Game Count</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {sessionRows.map((row) => (
+          {nightRows.map((row) => (
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-              <Link style={{color:"blue"}} to={`/sessions/${row.id}`}>{row.name}</Link>
+              <Link style={{color:"blue"}} to={`/nights/${row.id}`}>{row.name}</Link>
               </TableCell>
               <TableCell align="right">{row.user}</TableCell>
               <TableCell align="right">{row.date}</TableCell>

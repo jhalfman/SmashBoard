@@ -15,9 +15,9 @@ rules = Rule.create([{name: "Preme", description: "Player cannot drop early from
 
 users = User.create(username: "Jordan")
 
-sessions = Session.create(name: "Friday Night", user_id: 1)
+nights = Night.create(name: "Friday Night", user_id: 1)
 
-games = Game.create(time: 8, session_id: 1, notes: "First game of night")
+games = Game.create(time: 8, night_id: 1, notes: "First game of night")
 
 player_character_games = PlayerCharacterGame.create([{game_id: 1, player_character_id: 1}, {game_id: 1, player_character_id: 2}, {game_id: 1, player_character_id: 3}, {game_id: 1, player_character_id: 4}])
 

@@ -1,8 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
-import SessionsTable from './components/SessionsTable';
+import NightsTable from './components/NightsTable';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
-import Session from './components/Session';
+import Night from './components/Night';
+import Game from './components/Game';
 import Route2 from './components/Route2';
 
 function App() {
@@ -11,9 +12,10 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path='/sessions' element={<SessionsTable />}/>
+        <Route path='/nights' element={<NightsTable />}/>
+        <Route path='/nights/:id' element={<Night />}/>
+        <Route path='/games/:id' element={<Game />}/>
         <Route path='/route2' element={<Route2 />}/>
-        <Route path='/sessions/:id' element={<Session />}/>
       </Routes>
       
     </div>

@@ -24,10 +24,18 @@ ActiveRecord::Schema.define(version: 2023_01_08_171809) do
   create_table "games", force: :cascade do |t|
     t.integer "time"
     t.string "notes"
-    t.bigint "session_id", null: false
+    t.bigint "night_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["session_id"], name: "index_games_on_session_id"
+    t.index ["night_id"], name: "index_games_on_night_id"
+  end
+
+  create_table "nights", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_nights_on_user_id"
   end
 
   create_table "penalties", force: :cascade do |t|
@@ -73,14 +81,6 @@ ActiveRecord::Schema.define(version: 2023_01_08_171809) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "sessions", force: :cascade do |t|
-    t.string "name"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_sessions_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -89,7 +89,8 @@ ActiveRecord::Schema.define(version: 2023_01_08_171809) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "games", "sessions"
+  add_foreign_key "games", "nights"
+  add_foreign_key "nights", "users"
   add_foreign_key "penalties", "games"
   add_foreign_key "penalties", "player_characters"
   add_foreign_key "penalties", "rules"
@@ -97,5 +98,4 @@ ActiveRecord::Schema.define(version: 2023_01_08_171809) do
   add_foreign_key "player_character_games", "player_characters"
   add_foreign_key "player_characters", "characters"
   add_foreign_key "player_characters", "players"
-  add_foreign_key "sessions", "users"
 end
