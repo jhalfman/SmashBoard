@@ -7,9 +7,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { NavLink as Link} from 'react-router-dom';
+import {useEffect, useState} from 'react';
 
 
-export default function SessionsTable({sessions}) {
+export default function SessionsTable() {
+
+  const [sessions, setSessions] = useState([])
+
+    useEffect(() => {
+        fetch("/sessions")
+        .then(resp => resp.json())
+        .then(data => setSessions(data))
+      }, [])
 
   function createData(name, user, date, games, id) {
     return { name, user, date, games, id};

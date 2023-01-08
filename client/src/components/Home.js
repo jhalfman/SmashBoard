@@ -1,5 +1,4 @@
 import React from 'react'
-import Sessions from './Sessions'
 
 const Home = () => {
   return (

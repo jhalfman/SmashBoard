@@ -1,8 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
-import Sessions from './components/Sessions';
-import Route2 from './components/Route2';
+import SessionsTable from './components/SessionsTable';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
+import Session from './components/Session';
+import Route2 from './components/Route2';
 
 function App() {
   return (
@@ -10,8 +11,9 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path='/sessions' element={<Sessions />}/>
+        <Route path='/sessions' element={<SessionsTable />}/>
         <Route path='/route2' element={<Route2 />}/>
+        <Route path='/sessions/:id' element={<Session />}/>
       </Routes>
       
     </div>
