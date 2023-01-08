@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
   
+  resources :penalties
+  resources :player_character_games
+  resources :games
+  resources :sessions
+  resources :users
+  resources :rules
+  resources :player_characters
+  resources :players
+  resources :characters
   # Routing logic: fallback requests for React Router.
   # Leave this here to help deploy your app later!
   get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
