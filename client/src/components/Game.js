@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField';
 import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
+import PopoutText from './PopoutText';
+
 
 const Game = ({ruleList}) => {
     const [nightId, setNightId] = useState(null)
@@ -156,7 +158,10 @@ const Game = ({ruleList}) => {
               <TableRow>
               <TableCell><img alt="smash logo" id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
                 {ruleList.map(rule => {
-                    return <TableCell key={rule.id}><img alt={rule.name} className="rulesImage" src={rule.image} onClick={() => updatePenalty(rule.name, rule.id)}/></TableCell>
+                    return <TableCell key={rule.id}>
+                        {/* <img alt={rule.name} className="rulesImage" src={rule.image} onClick={() => updatePenalty(rule.name, rule.id)}/> */}
+                        <PopoutText rule={rule} updatePenalty={updatePenalty}/>
+                        </TableCell>
                 })}
               </TableRow>
             </TableHead>
