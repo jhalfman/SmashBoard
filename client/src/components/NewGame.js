@@ -5,8 +5,9 @@ import {useState} from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { useNavigate } from 'react-router-dom';
 
-const NewGame = ({players , characters}) => {
+const NewGame = ({players , characters, currentNight}) => {
     //time, notes, night_id
     const [newGameForm, setNewGameForm] = useState({
         notes: "",
@@ -18,8 +19,10 @@ const NewGame = ({players , characters}) => {
         p3p: '',
         p3c: '',
         p4p: '',
-        p4c: ''
+        p4c: '',
+        night_id: currentNight
     })
+    let navigate = useNavigate();
 
     function updateGameNotes(e) {
       setNewGameForm({...newGameForm, notes: e.target.value})
@@ -30,20 +33,27 @@ const NewGame = ({players , characters}) => {
     }
 
     function updatePlayerCharacters(e) {
-      console.log(e.target.name, e.target.value)
       setNewGameForm({...newGameForm, [e.target.name]: e.target.value})
     }
 
     function createNewGame(e) {
       e.preventDefault();
-      console.log(newGameForm)
+      fetch(`/games`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({...newGameForm})
+      })
+      .then(resp => resp.json())
+      .then(game => navigate(`/games/${game.id}`))
     }
 
     function createFormOptions() {
       const playerArray = ["p1", "p2", "p3", "p4"]
       return playerArray.map(player => {
         return (
-          <>
+          <React.Fragment key={player}>
           <h3>{`Player ${player[1]}`}</h3>
           <InputLabel id={`${player}p-select-label`}>Player Tag</InputLabel>
           <Select
@@ -71,7 +81,7 @@ const NewGame = ({players , characters}) => {
               return <MenuItem key={character.id} value={character.id}>{character.name}</MenuItem>
             })}
           </Select>
-        </>
+          </React.Fragment>
         )
       })
     }

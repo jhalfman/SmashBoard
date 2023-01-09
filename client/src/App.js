@@ -13,6 +13,7 @@ function App() {
   const [ruleList, setRuleList] = useState([])
   const [players, setPlayers] = useState([])
   const [characters, setCharacters] = useState([])
+  const [currentNight, setCurrentNight] = useState([])
 
   useEffect(() => {
     fetch(`/rules`)
@@ -53,8 +54,8 @@ function App() {
         <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
         <Route path='/nights' element={<NightsTable />}/>
         <Route path='/nights/new' element={<CreateNight />}/>
-        <Route path='/nights/:id' element={<Night />}/>
-        <Route path='/games/new' element={<NewGame players={players} characters={characters}/>}/>
+        <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight}/>}/>
+        <Route path='/games/new' element={<NewGame players={players} characters={characters} currentNight={currentNight}/>}/>
         <Route path='/games/:id' element={<Game ruleList={ruleList}/>}/>
       </Routes>
       

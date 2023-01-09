@@ -11,15 +11,18 @@ import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
-const Night = () => {
+const Night = ({setCurrentNight}) => {
     const [games, setGames] = useState([])
     const {id} = useParams();
 
     useEffect(() => {
         fetch(`/nights/${id}`)
         .then(resp => resp.json())
-        .then(data => setGames(data))
-    }, [id])
+        .then(data => {
+          setGames(data)
+          setCurrentNight(id)
+        })
+    }, [id, setCurrentNight])
 
     function createData(length, penalties, notes, id) {
       return {length, penalties, notes, id};
