@@ -16,18 +16,7 @@ const Game = ({ruleList}) => {
     const [players, setPlayers] = useState([])
     const [penalties, setPenalties] = useState([])
     const {id} = useParams();
-    const [gameForm, setGameForm] = useState({
-        p1: "",
-        p2: "",
-        p3: "",
-        p4: ""
-    })
-    const [scoreboard, setScoreboard] = useState([
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ])
+    const [scoreboard, setScoreboard] = useState(null)
     const [newPenalty, setNewPenalty] = useState({
         player_character_id: "",
         rule_id: "",
@@ -44,7 +33,18 @@ const Game = ({ruleList}) => {
         .then(resp => resp.json())
         .then(game => {
             setPlayers(game.player_characters)
+            const initialScore = {}
+            game.player_characters.forEach(pc => {
+                initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            })
+            setScoreboard(initialScore)
             setPenalties(game.penalties)
+            const newScoreboard = {...scoreboard}
+            game.penalties.map(penalty => {
+                console.log(newScoreboard[penalty.player_character_id][penalty.rule_id])
+                newScoreboard[penalty.player_character_id][penalty.rule_id] += 1
+                console.log(newScoreboard[penalty.player_character_id][penalty.rule_id])
+            })
         })
     }, [])
 
@@ -157,9 +157,9 @@ const Game = ({ruleList}) => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                         <TableCell component="th" scope="row" onClick={() => updatePlayer(pc)}>{`${pc.player.name} (${pc.character.name})`}</TableCell>
-                        {scoreboard[index].map((tally, index1) => {
+                        {scoreboard ? scoreboard[pc.id].map((tally, index1) => {
                             return <TableCell component="th" scope="row" key={index1}>{tally}</TableCell>
-                        })}
+                        }) : null}
                     </TableRow>
                     )
                 })}
