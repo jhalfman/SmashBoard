@@ -19,7 +19,7 @@ const Night = () => {
         fetch(`/nights/${id}`)
         .then(resp => resp.json())
         .then(data => setGames(data))
-    }, [])
+    }, [id])
 
     function createData(length, penalties, notes, id) {
       return {length, penalties, notes, id};

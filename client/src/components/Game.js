@@ -110,6 +110,9 @@ const Game = ({ruleList}) => {
                 ...gameComments,
                 newComment
             ])
+             const newScoreboard = {...scoreboard}
+             newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+             setScoreboard(newScoreboard)
         })
         cancelEventSelect()
 

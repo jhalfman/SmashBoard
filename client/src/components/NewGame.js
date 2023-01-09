@@ -11,8 +11,13 @@ const NewGame = () => {
         p3: null,
         p4: null
     })
+
+    useEffect(() => {
+      setNewGameForm({...newGameForm})
+    }, [newGameForm])
+    
   return (
-    <div>NewGame</div>
+    <div>{newGameForm}</div>
   )
 }
 
