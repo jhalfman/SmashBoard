@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { NavLink as Link} from 'react-router-dom';
+//import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -44,13 +44,13 @@ const Game = ({ruleList}) => {
                 
                 const playerName = game.player_characters.find(pc => pc.id === penalty.player_character_id).player.name
                 const character = game.player_characters.find(pc => pc.id === penalty.player_character_id).character.name
-                const rule = ruleList.find(rule => rule.id === penalty.rule_id).name
+                const rule = (ruleList.length !== 0 ? ruleList.find(rule => rule.id === penalty.rule_id).name : "loading")
                 newGameComments.push(`${penalty.created_at} - Penalty: ${rule} - Player: ${playerName} (${character}) - ${penalty.description}`)
             })
             setGameComments(newGameComments)
             setScoreboard(newScoreboard)
         })
-    }, [])
+    }, [ruleList, id])
 
     function eventSelect() {
         setCurrentPenaltySelected("")
@@ -146,9 +146,9 @@ const Game = ({ruleList}) => {
 
                 </TableRow>
               <TableRow>
-              <TableCell><img id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
+              <TableCell><img alt="smash logo" id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
                 {ruleList.map(rule => {
-                    return <TableCell key={rule.id}><img className="rulesImage" src={rule.image} onClick={() => updatePenalty(rule.name, rule.id)}/></TableCell>
+                    return <TableCell key={rule.id}><img alt={rule.name} className="rulesImage" src={rule.image} onClick={() => updatePenalty(rule.name, rule.id)}/></TableCell>
                 })}
               </TableRow>
             </TableHead>
