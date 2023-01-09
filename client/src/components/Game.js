@@ -33,18 +33,17 @@ const Game = ({ruleList}) => {
         .then(resp => resp.json())
         .then(game => {
             setPlayers(game.player_characters)
+
             const initialScore = {}
             game.player_characters.forEach(pc => {
                 initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             })
-            setScoreboard(initialScore)
-            setPenalties(game.penalties)
-            const newScoreboard = {...scoreboard}
+            const newScoreboard = {...initialScore}
             game.penalties.map(penalty => {
-                console.log(newScoreboard[penalty.player_character_id][penalty.rule_id])
-                newScoreboard[penalty.player_character_id][penalty.rule_id] += 1
-                console.log(newScoreboard[penalty.player_character_id][penalty.rule_id])
+                newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
             })
+            setPenalties(game.penalties)
+            setScoreboard(newScoreboard)
         })
     }, [])
 
