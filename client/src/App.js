@@ -8,12 +8,15 @@ import CreateNight from './components/CreateNight';
 import {useEffect, useState} from 'react';
 import NewGame from './components/NewGame';
 import Players from './components/Players';
+import Login from './components/Login';
+import CreateUser from './components/CreateUser';
 
 function App() {
   const [ruleList, setRuleList] = useState([])
   const [players, setPlayers] = useState([])
   const [characters, setCharacters] = useState([])
   const [currentNight, setCurrentNight] = useState([])
+  const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
     fetch(`/rules`)
@@ -48,9 +51,11 @@ function App() {
 
   return (
     <div className="App">
-      <ResponsiveAppBar />
+      <ResponsiveAppBar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
       <Routes>
         <Route path='/' element={<Home />}/>
+        <Route path='/login' element={<Login />}/>
+        <Route path='/user/new' element={<CreateUser setLoggedIn={setLoggedIn}/>}/>
         <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
         <Route path='/nights' element={<NightsTable />}/>
         <Route path='/nights/new' element={<CreateNight />}/>

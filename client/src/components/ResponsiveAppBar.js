@@ -12,12 +12,13 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import {useState} from 'react';
 import { NavLink as Link} from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({loggedIn, setLoggedIn}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,6 +36,18 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  function logoutUser() {
+    fetch(`/logout`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(resp => resp.json())
+    .then(data => console.log(data))
+    setLoggedIn(false)
+  }
 
   return (
     <AppBar position="static">
@@ -128,7 +141,24 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {loggedIn ? 
+            <Link to="/logout">
+            <Button variant="contained"
+            onClick={() => logoutUser()}
+            sx={{ my: 2, color: 'white', display: 'block' }}>Log Out</Button>
+        </Link> :
+        <Link to="/user/new">
+        <Button variant="contained"
+        onClick={handleCloseNavMenu}
+        sx={{ my: 2, color: 'white', display: 'block' }}>Create User</Button>
+    </Link>}
+    {loggedIn ? null : 
+            <Link to="/login">
+              <Button variant="contained"
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}>Sign In</Button>
+            </Link>}
+            {/* <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="" />
               </IconButton>
@@ -154,7 +184,7 @@ function ResponsiveAppBar() {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu> */}
           </Box>
         </Toolbar>
       </Container>
