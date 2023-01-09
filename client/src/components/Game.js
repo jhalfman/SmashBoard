@@ -8,11 +8,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-//import { NavLink as Link} from 'react-router-dom';
+import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
 const Game = ({ruleList}) => {
+    const [nightId, setNightId] = useState(null)
     const [players, setPlayers] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
@@ -31,8 +32,9 @@ const Game = ({ruleList}) => {
         fetch(`/games/${id}`)
         .then(resp => resp.json())
         .then(game => {
+            setNightId(game.night.id)
             setPlayers(game.player_characters)
-
+            
             const initialScore = {}
             game.player_characters.forEach(pc => {
                 initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -133,10 +135,12 @@ const Game = ({ruleList}) => {
             <TableHead>
                 <TableRow>
                     <TableCell>Super Smash Brothers Penalties</TableCell>
+                    <TableCell><Link to={`/nights/${nightId}`}><Button variant="contained" color="success">Back to Game List</Button></Link></TableCell>
                     <TableCell>
                         <Button variant="contained" color="success" onClick={eventSelect}>Add Event</Button>
                         {eventSelectOn ? <Button variant="contained" color="error" onClick={() => cancelEventSelect()}>Cancel Event</Button> : null}
                     </TableCell>
+                    
                     {eventSelectOn ? <TableCell></TableCell> : null}
                     {eventSelectOn ? <TableCell>{currentPenaltySelected}</TableCell> : null}
                     {eventSelectOn ? <TableCell></TableCell> : null}
@@ -145,6 +149,7 @@ const Game = ({ruleList}) => {
                     {eventSelectOn ? <TableCell>{currentPlayerSelected}</TableCell> : null}
                     {eventSelectOn ? <TableCell></TableCell> : null}
                     {submitSelectOn ? <TableCell>{penaltyDescriptionForm}</TableCell> : null}
+                    
                     
 
                 </TableRow>

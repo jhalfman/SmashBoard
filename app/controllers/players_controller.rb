@@ -5,7 +5,6 @@ class PlayersController < ApplicationController
     end
 
     def create
-        byebug
         player = Player.create(player_params)
         render json: player, status: :created
     end

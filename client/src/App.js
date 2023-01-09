@@ -11,23 +11,45 @@ import Players from './components/Players';
 
 function App() {
   const [ruleList, setRuleList] = useState([])
+  const [players, setPlayers] = useState([])
 
   useEffect(() => {
     fetch(`/rules`)
     .then(resp => resp.json())
     .then(rules => setRuleList(rules))
+
+    fetch(`/players`)
+        .then(resp => resp.json())
+        .then(playerList => setPlayers(playerList))
+
   }, [])
+
+  function createNewPlayer(e, newPlayerForm) {
+    e.preventDefault();
+    fetch(`/players`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newPlayerForm)
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      console.log(data)
+        setPlayers([...players, data])
+    })
+}
 
   return (
     <div className="App">
       <ResponsiveAppBar />
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path='/players' element={<Players />}/>
+        <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
         <Route path='/nights' element={<NightsTable />}/>
         <Route path='/nights/new' element={<CreateNight />}/>
         <Route path='/nights/:id' element={<Night />}/>
-        <Route path='/games/new' element={<NewGame />}/>
+        <Route path='/games/new' element={<NewGame players={players}/>}/>
         <Route path='/games/:id' element={<Game ruleList={ruleList}/>}/>
       </Routes>
       
