@@ -29,7 +29,7 @@ const Game = ({ruleList}) => {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
     const [newPenalty, setNewPenalty] = useState({
-        player_id: "",
+        player_character_id: "",
         rule_id: "",
         description: ""
     })
@@ -59,7 +59,7 @@ const Game = ({ruleList}) => {
         setEventSelectOn(false)
         setSubmitSelectOn(false)
         setNewPenalty({
-            player_id: "",
+            player_character_id: "",
             rule_id: "",
             description: ""
         })
@@ -78,7 +78,7 @@ const Game = ({ruleList}) => {
 
     function updatePlayer(pc) {
         if (eventSelectOn) {
-            setNewPenalty({...newPenalty, player_id: pc.id})
+            setNewPenalty({...newPenalty, player_character_id: pc.id})
             setCurrentPlayerSelected(`${pc.player.name} (${pc.character.name})`)
             if (currentPenaltySelected) {
                 setSubmitSelectOn(true)
@@ -92,7 +92,15 @@ const Game = ({ruleList}) => {
 
     function createNewPenalty(e) {
         e.preventDefault();
-        console.log(newPenalty)
+        fetch(`/penalties`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({...newPenalty, "game_id": id})
+        })
+        .then(resp => resp.json())
+        .then(data => console.log(data))
         cancelEventSelect()
 
     }
