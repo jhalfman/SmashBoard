@@ -14,7 +14,6 @@ import { useParams } from 'react-router-dom';
 
 const Game = ({ruleList}) => {
     const [players, setPlayers] = useState([])
-    const [penalties, setPenalties] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
     const [newPenalty, setNewPenalty] = useState({
@@ -39,10 +38,16 @@ const Game = ({ruleList}) => {
                 initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             })
             const newScoreboard = {...initialScore}
-            game.penalties.map(penalty => {
+            const newGameComments = []
+            game.penalties.forEach(penalty => {
                 newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+                
+                const playerName = game.player_characters.find(pc => pc.id === penalty.player_character_id).player.name
+                const character = game.player_characters.find(pc => pc.id === penalty.player_character_id).character.name
+                const rule = ruleList.find(rule => rule.id === penalty.rule_id).name
+                newGameComments.push(`${penalty.created_at} - Penalty: ${rule} - Player: ${playerName} (${character}) - ${penalty.description}`)
             })
-            setPenalties(game.penalties)
+            setGameComments(newGameComments)
             setScoreboard(newScoreboard)
         })
     }, [])
@@ -100,7 +105,6 @@ const Game = ({ruleList}) => {
         })
         .then(resp => resp.json())
         .then(penalty => {
-            console.log(penalty)
             const newComment = `${penalty.created_at} - Penalty: ${penalty.rule.name} - Player: ${penalty.player_character.player.name} (${penalty.player_character.character.name}) - ${penalty.description}`
             setGameComments([
                 ...gameComments,
