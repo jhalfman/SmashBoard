@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { NavLink as Link} from 'react-router-dom';
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,6 +31,7 @@ const CreateNight = () => {
     }
 
   return (
+    <>
     <form onSubmit={(e) => submitNightForm(e)}>
         <label>Enter a title for a new game session</label>
         <br></br>
@@ -37,6 +39,8 @@ const CreateNight = () => {
         <br></br>
         <Button type="submit" variant="contained">Create</Button>
     </form>
+    <Link to="/nights"><Button variant="contained" color="success">Back to Night List</Button></Link>
+    </>
   )
 }
 

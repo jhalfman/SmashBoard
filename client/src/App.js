@@ -12,6 +12,7 @@ import Players from './components/Players';
 function App() {
   const [ruleList, setRuleList] = useState([])
   const [players, setPlayers] = useState([])
+  const [characters, setCharacters] = useState([])
 
   useEffect(() => {
     fetch(`/rules`)
@@ -19,8 +20,12 @@ function App() {
     .then(rules => setRuleList(rules))
 
     fetch(`/players`)
-        .then(resp => resp.json())
-        .then(playerList => setPlayers(playerList))
+    .then(resp => resp.json())
+    .then(playerList => setPlayers(playerList))
+
+    fetch(`/characters`)
+    .then(resp => resp.json())
+    .then(characterList => setCharacters(characterList))
 
   }, [])
 
@@ -49,7 +54,7 @@ function App() {
         <Route path='/nights' element={<NightsTable />}/>
         <Route path='/nights/new' element={<CreateNight />}/>
         <Route path='/nights/:id' element={<Night />}/>
-        <Route path='/games/new' element={<NewGame players={players}/>}/>
+        <Route path='/games/new' element={<NewGame players={players} characters={characters}/>}/>
         <Route path='/games/:id' element={<Game ruleList={ruleList}/>}/>
       </Routes>
       
