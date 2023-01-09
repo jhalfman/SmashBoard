@@ -14,6 +14,19 @@ const Game = ({ruleList}) => {
     const [players, setPlayers] = useState([])
     const [penalties, setPenalties] = useState([])
     const {id} = useParams();
+    const [gameForm, setGameForm] = useState({
+        p1: "",
+        p2: "",
+        p3: "",
+        p4: ""
+    })
+    const [scoreboard, setScoreboard] = useState([
+        {p1: []},
+        {p2: []},
+        {p3: []},
+        {p4: []}
+    ])
+    console.log(ruleList)
     useEffect(() => {
         fetch(`/games/${id}`)
         .then(resp => resp.json())
@@ -42,11 +55,12 @@ const Game = ({ruleList}) => {
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
                 <TableRow>
-                    <TableCell>Rule Number</TableCell>
+                    <TableCell>Super Smash Brothers Penalties</TableCell>
                 </TableRow>
               <TableRow>
+              <TableCell><img id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
                 {ruleList.map(rule => {
-                    return <TableCell>{rule.name}</TableCell>
+                    return <TableCell><img class="rulesImage" src={rule.image}/></TableCell>
                 })}
               </TableRow>
             </TableHead>

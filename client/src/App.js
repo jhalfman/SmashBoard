@@ -6,7 +6,7 @@ import Night from './components/Night';
 import Game from './components/Game';
 import CreateNight from './components/CreateNight';
 import {useEffect, useState} from 'react';
-import NewGame from './NewGame';
+import NewGame from './components/NewGame';
 import Players from './components/Players';
 
 function App() {
