@@ -1,7 +1,7 @@
 class PenaltiesController < ApplicationController
     def create
         penalty = Penalty.create(penalty_params)
-        render json: penalty, status: :created
+        render json: penalty, include: ["player_character", "player_character.player", "player_character.character", "rule"], status: :created
     end
 
         private

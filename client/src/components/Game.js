@@ -100,7 +100,14 @@ const Game = ({ruleList}) => {
             body: JSON.stringify({...newPenalty, "game_id": id})
         })
         .then(resp => resp.json())
-        .then(data => console.log(data))
+        .then(penalty => {
+            console.log(penalty)
+            const newComment = `${penalty.created_at} - Penalty: ${penalty.rule.name} - Player: ${penalty.player_character.player.name} (${penalty.player_character.character.name}) - ${penalty.description}`
+            setGameComments([
+                ...gameComments,
+                newComment
+            ])
+        })
         cancelEventSelect()
 
     }
@@ -162,7 +169,7 @@ const Game = ({ruleList}) => {
         <div>
             <h1>Penalty Tracker</h1>
             {gameComments.map((comment, index) => {
-                <div key={index}>This is a comment</div>
+                return <p key={index}>{comment}</p>
             })}
         </div>
         </>
