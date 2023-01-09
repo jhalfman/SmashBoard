@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
@@ -31,6 +32,9 @@ const Night = () => {
     
   
     return (
+      <div>
+      <Link to="/games/new"><Button variant="contained" color="success">Add Game</Button></Link>
+      <Link to="/nights"><Button variant="contained" color="success">Back to Night List</Button></Link>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
@@ -58,6 +62,7 @@ const Night = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
     );
 }
 

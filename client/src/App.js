@@ -4,18 +4,31 @@ import NightsTable from './components/NightsTable';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import Night from './components/Night';
 import Game from './components/Game';
-import Route2 from './components/Route2';
+import CreateNight from './components/CreateNight';
+import {useEffect, useState} from 'react';
+import NewGame from './NewGame';
+import Players from './components/Players';
 
 function App() {
+  const [ruleList, setRuleList] = useState([])
+
+  useEffect(() => {
+    fetch(`/rules`)
+    .then(resp => resp.json())
+    .then(rules => setRuleList(rules))
+  }, [])
+
   return (
     <div className="App">
       <ResponsiveAppBar />
       <Routes>
         <Route path='/' element={<Home />}/>
+        <Route path='/players' element={<Players />}/>
         <Route path='/nights' element={<NightsTable />}/>
+        <Route path='/nights/new' element={<CreateNight />}/>
         <Route path='/nights/:id' element={<Night />}/>
-        <Route path='/games/:id' element={<Game />}/>
-        <Route path='/route2' element={<Route2 />}/>
+        <Route path='/games/new' element={<NewGame />}/>
+        <Route path='/games/:id' element={<Game ruleList={ruleList}/>}/>
       </Routes>
       
     </div>
