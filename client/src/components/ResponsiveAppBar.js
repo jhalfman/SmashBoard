@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {useState} from 'react';
 import { NavLink as Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -21,6 +22,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function ResponsiveAppBar({loggedIn, setLoggedIn}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  let navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,8 +47,10 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
       }
     })
     .then(resp => resp.json())
-    .then(data => console.log(data))
-    setLoggedIn(false)
+    .then(data => {
+      setLoggedIn(false)
+      navigate(`/`)
+    })
   }
 
   return (
