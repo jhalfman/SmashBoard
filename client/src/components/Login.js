@@ -26,7 +26,7 @@ const Login = ( {setLoggedIn} ) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({currentUserForm})
+            body: JSON.stringify({...currentUserForm})
         })
         .then(resp => resp.json())
         .then(user => {

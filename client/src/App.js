@@ -54,7 +54,7 @@ function App() {
       <ResponsiveAppBar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path='/login' element={<Login />}/>
+        <Route path='/login' element={<Login setLoggedIn={setLoggedIn}/>}/>
         <Route path='/user/new' element={<CreateUser setLoggedIn={setLoggedIn}/>}/>
         <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
         <Route path='/nights' element={<NightsTable />}/>

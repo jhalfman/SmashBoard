@@ -40,6 +40,7 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
   };
 
   function logoutUser() {
+    console.log("logging out")
     fetch(`/logout`, {
       method: "DELETE",
       headers: {
@@ -47,7 +48,7 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
       }
     })
     .then(resp => resp.json())
-    .then(data => {
+    .then(() => {
       setLoggedIn(false)
       navigate(`/`)
     })
@@ -146,11 +147,10 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
 
           <Box sx={{ flexGrow: 0 }}>
             {loggedIn ? 
-            <Link to="/logout">
-            <Button variant="contained"
-            onClick={() => logoutUser()}
-            sx={{ my: 2, color: 'white', display: 'block' }}>Log Out</Button>
-        </Link> :
+              <Button variant="contained"
+              onClick={() => logoutUser()}
+              sx={{ my: 2, color: 'white', display: 'block' }}>Log Out</Button>
+         :
         <Link to="/user/new">
         <Button variant="contained"
         onClick={handleCloseNavMenu}
