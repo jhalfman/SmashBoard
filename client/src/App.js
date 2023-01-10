@@ -17,8 +17,6 @@ function App() {
   const [characters, setCharacters] = useState([])
   const [currentNight, setCurrentNight] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
-
-  console.log(currentUser)
   
   useEffect(() => {
     fetch('/users/:id')
@@ -39,6 +37,10 @@ function App() {
     fetch(`/characters`)
     .then(resp => resp.json())
     .then(characterList => setCharacters(characterList))
+
+    fetch('/player_characters')
+    .then(resp => resp.json())
+    .then(data => console.log(data))
 
 
   }, [])
