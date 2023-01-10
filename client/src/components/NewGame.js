@@ -49,8 +49,13 @@ const NewGame = ({players , characters, currentNight}) => {
         },
         body: JSON.stringify({...newGameForm})
       })
-      .then(resp => resp.json())
-      .then(game => navigate(`/games/${game.id}`))
+      .then(resp => {
+        if (resp.ok) {
+            resp.json().then(game => navigate(`/games/${game.id}`))
+        }
+        else
+            resp.json().then(error => console.log(error))
+      })
     }
 
     function createFormOptions() {

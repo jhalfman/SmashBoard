@@ -21,4 +21,4 @@ games = Game.create(time: 8, night_id: 1, notes: "First game of night")
 
 player_character_games = PlayerCharacterGame.create([{game_id: 1, player_character_id: 1}, {game_id: 1, player_character_id: 2}, {game_id: 1, player_character_id: 3}, {game_id: 1, player_character_id: 4}])
 
-penalties = Penalty.create([{game_id: 1, player_character_id: 1, rule_id: 1, description: "preme in first 10 seconds??"}, {game_id: 1, player_character_id: 2, rule_id: 3, description: "kaboom"}, {game_id: 1, player_character_id: 1, rule_id: 2, description: "not doing so hot"}, {game_id: 1, player_character_id: 2, rule_id: 2, description: "matt screen clear??"}])
+penalties = Penalty.create([{game_id: 1, user_id: 1, player_character_id: 1, rule_id: 1, description: "preme in first 10 seconds??"}, {game_id: 1, player_character_id: 2, rule_id: 3, description: "kaboom"}, {game_id: 1, player_character_id: 1, rule_id: 2, description: "not doing so hot"}, {game_id: 1, player_character_id: 2, rule_id: 2, description: "matt screen clear??"}])

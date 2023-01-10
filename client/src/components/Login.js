@@ -39,10 +39,10 @@ const Login = ( {setCurrentUser} ) => {
     <form onSubmit={submitcurrentUserForm}>
         <h1>Log In to Existing Account</h1>
         <br></br>
-        <TextField required id="outlined-basic" label="Username" variant="outlined" name="username" onChange={updatecurrentUserForm}/>
+        <TextField required label="Username" variant="outlined" name="username" onChange={updatecurrentUserForm}/>
         <br></br>
         <br></br>
-        <TextField required id="outlined-basic" type="password" label="Password" variant="outlined"  name="password" onChange={updatecurrentUserForm}/>
+        <TextField required type="password" label="Password" variant="outlined"  name="password" onChange={updatecurrentUserForm}/>
         <br></br>
         <br></br>
         <Button type="submit" variant="contained">Log In</Button>

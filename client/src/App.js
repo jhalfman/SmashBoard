@@ -37,12 +37,6 @@ function App() {
     fetch(`/characters`)
     .then(resp => resp.json())
     .then(characterList => setCharacters(characterList))
-
-    fetch('/player_characters')
-    .then(resp => resp.json())
-    .then(data => console.log(data))
-
-
   }, [])
 
   function createNewPlayer(e, newPlayerForm) {
@@ -73,7 +67,7 @@ function App() {
         <Route path='/nights/new' element={<CreateNight />}/>
         <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight}/>}/>
         <Route path='/games/new' element={<NewGame players={players} characters={characters} currentNight={currentNight}/>}/>
-        <Route path='/games/:id' element={<Game ruleList={ruleList}/>}/>
+        <Route path='/games/:id' element={<Game ruleList={ruleList} currentUser={currentUser}/>}/>
       </Routes>
       
     </div>

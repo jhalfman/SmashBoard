@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
     render json: {errors: {user: "unauthorized user"}}, status: :unauthorized unless current_user
   end
 
-  def is_admin?
+  def is_admin
     admin = current_user.admin?
     render json: {errors: {user: "no admin access"}}, status: :forbidden unless admin
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_09_030802) do
+ActiveRecord::Schema.define(version: 2023_01_10_030507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2023_01_09_030802) do
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id", null: false
     t.index ["game_id"], name: "index_penalties_on_game_id"
     t.index ["player_character_id"], name: "index_penalties_on_player_character_id"
     t.index ["rule_id"], name: "index_penalties_on_rule_id"

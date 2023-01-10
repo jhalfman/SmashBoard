@@ -26,8 +26,15 @@ const CreateNight = () => {
             },
             body: JSON.stringify({...nightForm, user_id: 1})
         })
-        .then(resp => resp.json())
-        .then(data => navigate(`/nights/${data.id}`))
+        .then(resp => {
+            if (resp.ok) {
+                resp.json().then(data => navigate(`/nights/${data.id}`))
+            }
+            else
+                resp.json().then(error => console.log(error))
+        })
+        //     resp => resp.json())
+        // .then(data => navigate(`/nights/${data.id}`))
     }
 
   return (
