@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CreateUser = ( {setLoggedIn} ) => {
+const CreateUser = ( {setCurrentUser} ) => {
     const [newUserForm, setNewUserForm] = useState({
         username: "",
         password: ""
@@ -30,8 +30,7 @@ const CreateUser = ( {setLoggedIn} ) => {
         })
         .then(resp => resp.json())
         .then(user => {
-            console.log(user)
-            setLoggedIn(true)
+            setCurrentUser(user)
             navigate(`/`)
         })
     }

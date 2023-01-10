@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar({loggedIn, setLoggedIn}) {
+function ResponsiveAppBar({setCurrentUser, currentUser}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   let navigate = useNavigate();
@@ -42,16 +42,10 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
   function logoutUser() {
     console.log("logging out")
     fetch(`/logout`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      }
+      method: "DELETE"
     })
-    .then(resp => resp.json())
-    .then(() => {
-      setLoggedIn(false)
-      navigate(`/`)
-    })
+    setCurrentUser(null)
+    navigate(`/`)
   }
 
   return (
@@ -59,23 +53,9 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Home
-          </Typography>
+          <Button variant="contained"
+            onClick={handleCloseNavMenu}
+            sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -146,7 +126,7 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {loggedIn ? 
+            {currentUser ? 
               <Button variant="contained"
               onClick={() => logoutUser()}
               sx={{ my: 2, color: 'white', display: 'block' }}>Log Out</Button>
@@ -156,7 +136,7 @@ function ResponsiveAppBar({loggedIn, setLoggedIn}) {
         onClick={handleCloseNavMenu}
         sx={{ my: 2, color: 'white', display: 'block' }}>Create User</Button>
     </Link>}
-    {loggedIn ? null : 
+    {currentUser ? null : 
             <Link to="/login">
               <Button variant="contained"
               onClick={handleCloseNavMenu}

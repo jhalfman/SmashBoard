@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Home = () => {
+const Home = ({currentUser}) => {
   return (
     <div>
-      Home
+      {currentUser ? `Welcome ${currentUser.username}` : "Home"}
     </div>
   )
 }

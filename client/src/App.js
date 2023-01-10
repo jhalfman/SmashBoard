@@ -17,7 +17,10 @@ function App() {
   const [characters, setCharacters] = useState([])
   const [currentNight, setCurrentNight] = useState([])
   const [loggedIn, setLoggedIn] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
 
+  console.log(currentUser)
+  
   useEffect(() => {
     fetch(`/rules`)
     .then(resp => resp.json())
@@ -44,18 +47,17 @@ function App() {
     })
     .then(resp => resp.json())
     .then(data => {
-      console.log(data)
         setPlayers([...players, data])
     })
 }
 
   return (
     <div className="App">
-      <ResponsiveAppBar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+      <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>
       <Routes>
-        <Route path='/' element={<Home />}/>
-        <Route path='/login' element={<Login setLoggedIn={setLoggedIn}/>}/>
-        <Route path='/user/new' element={<CreateUser setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/' element={<Home currentUser={currentUser}/>}/>
+        <Route path='/login' element={<Login setCurrentUser={setCurrentUser}/>}/>
+        <Route path='/user/new' element={<CreateUser setCurrentUser={setCurrentUser}/>}/>
         <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
         <Route path='/nights' element={<NightsTable />}/>
         <Route path='/nights/new' element={<CreateNight />}/>
