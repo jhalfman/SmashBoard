@@ -12,7 +12,7 @@ class NightsController < ApplicationController
     end
 
     def create
-        night = Night.create(night_params)
+        night = Night.create!(night_params)
         render json: night, status: :created
     end
 

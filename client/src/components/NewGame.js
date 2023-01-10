@@ -38,6 +38,10 @@ const NewGame = ({players , characters, currentNight}) => {
 
     function createNewGame(e) {
       e.preventDefault();
+      if (newGameForm.p1p === newGameForm.p2p || newGameForm.p1p === newGameForm.p3p || newGameForm.p1p === newGameForm.p4p || newGameForm.p2p === newGameForm.p3p || newGameForm.p2p === newGameForm.p4p || newGameForm.p3p === newGameForm.p4p) {
+        return alert("Same player cannot be chosen twice")
+      }
+
       fetch(`/games`, {
         method: "POST",
         headers: {

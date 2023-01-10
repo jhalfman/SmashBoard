@@ -7,7 +7,7 @@ class PlayersController < ApplicationController
     end
 
     def create
-        player = Player.create(player_params)
+        player = Player.create!(player_params)
         render json: player, status: :created
     end
 

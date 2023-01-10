@@ -16,12 +16,18 @@ function App() {
   const [players, setPlayers] = useState([])
   const [characters, setCharacters] = useState([])
   const [currentNight, setCurrentNight] = useState([])
-  const [loggedIn, setLoggedIn] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
 
   console.log(currentUser)
   
   useEffect(() => {
+    fetch('/users/:id')
+    .then(resp => {
+      if (resp.ok) {
+        resp.json().then(user => setCurrentUser(user))
+      }
+    })
+
     fetch(`/rules`)
     .then(resp => resp.json())
     .then(rules => setRuleList(rules))
@@ -33,6 +39,7 @@ function App() {
     fetch(`/characters`)
     .then(resp => resp.json())
     .then(characterList => setCharacters(characterList))
+
 
   }, [])
 
@@ -47,6 +54,7 @@ function App() {
     })
     .then(resp => resp.json())
     .then(data => {
+      console.log(data)
         setPlayers([...players, data])
     })
 }
