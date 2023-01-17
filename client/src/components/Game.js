@@ -133,8 +133,14 @@ const Game = ({ruleList, currentUser}) => {
             body: JSON.stringify(form)
         })
         .then(resp => resp.json())
-        .then(data => {
-
+        .then(p => {
+            const newPenalties = penalties.map(penalty => {
+                if (penalty.id === p.id) {
+                    return p
+                }
+                else return penalty
+            })
+            setPenalties(newPenalties)
         })
     }
 

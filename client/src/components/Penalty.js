@@ -11,6 +11,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
         description: penalty.description
     })
     const [penaltyEditorOn, setPenaltyEditorOn] = useState(false)
+    console.log(penalty)
 
     useEffect(() => {
         const player = players.find(pc => pc.id === penalty.player_character_id).player.name
@@ -21,7 +22,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
 
         const rule = ruleList.find(rule => rule.id === penalty.rule_id).name
         setRuleName(rule)
-    }, [ruleList])
+    }, [ruleList, penalty])
 
     function updateEditPenaltyForm(e) {
         const updatedForm = {
