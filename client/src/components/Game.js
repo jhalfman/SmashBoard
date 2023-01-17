@@ -12,6 +12,7 @@ import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import PopoutText from './PopoutText';
+import Penalty from './Penalty';
 
 
 const Game = ({ruleList, currentUser}) => {
@@ -24,16 +25,12 @@ const Game = ({ruleList, currentUser}) => {
         rule_id: "",
         description: ""
     })
-    const [editPenaltyForm, setEditPenaltyForm] = useState({
-        description: ""
-    })
     const [currentPenaltySelected, setCurrentPenaltySelected] = useState("")
     const [currentPlayerSelected, setCurrentPlayerSelected] = useState("")
     const [gameComments, setGameComments] = useState([])
     const [eventSelectOn, setEventSelectOn] = useState(false)
     const [submitSelectOn, setSubmitSelectOn] = useState(false)
-    const [penalties, setPenalties] = useState(null)
-    const [editPenaltyOn, setEditPenaltyOn] = useState(false)
+    const [penalties, setPenalties] = useState([])
 
     useEffect(() => {
         fetch(`/games/${id}`)
@@ -47,29 +44,16 @@ const Game = ({ruleList, currentUser}) => {
                 initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             })
             const newScoreboard = {...initialScore}
-            const newGameComments = game.penalties.map(penalty => {
+            
+            const newPenalties = game.penalties.map(penalty => {
+                // increment score for each penalty
                 newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
-                const playerName = game.player_characters.find(pc => pc.id === penalty.player_character_id).player.name
-                const character = game.player_characters.find(pc => pc.id === penalty.player_character_id).character.name
-                const rule = (ruleList.length !== 0 ? ruleList.find(rule => rule.id === penalty.rule_id).name : "loading")
-                return (
-                    (penalty.id !== editPenaltyOn) ? <p key={penalty.id} id={penalty.id}>{penalty.created_at} - Penalty: {rule} - Player: {playerName} ({character}) - {penalty.description} <button onClick={() => editPenalty(penalty)}>EDIT</button></p> : 
-                    <div key={penalty.id}>
-                    <p id={penalty.id}>{penalty.created_at} - Penalty: {rule} - Player: {playerName} ({character}) - {penalty.description} <button onClick={() => setEditPenaltyOn(false)}>Cancel Edit</button></p>
-                    <form onSubmit={submitUpdatedPenaltyForm}>
-                        Update Description: <input type="text" id="description" onChange={updateDescription} value={editPenaltyForm.description}></input>
-                        <button>Confirm Update</button>
-                    </form>
-                    <button>Delete Penalty</button>
-                    </div>
-                
-                )
+                return penalty
             })
-            setPenalties(game.penalties)
-            setGameComments(newGameComments)
+            setPenalties(newPenalties)
             setScoreboard(newScoreboard)
         })
-    }, [ruleList, id, editPenaltyOn, editPenaltyForm])
+    }, [ruleList, id])
 
     function eventSelect() {
         setCurrentPenaltySelected("")
@@ -124,11 +108,6 @@ const Game = ({ruleList, currentUser}) => {
         })
         .then(resp => resp.json())
         .then(penalty => {
-            const newComment = <p key={penalty.id} id={penalty.id}>{penalty.created_at} - Penalty: {penalty.rule.name} - Player: {penalty.player_character.player.name} ({penalty.player_character.character.name}) - {penalty.description} <button onClick={() => editPenalty(penalty)}>EDIT</button></p>
-            setGameComments([
-                ...gameComments,
-                newComment
-            ])
              const newScoreboard = {...scoreboard}
              newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
              setScoreboard(newScoreboard)
@@ -144,30 +123,18 @@ const Game = ({ruleList, currentUser}) => {
         </form>
     )
 
-    function editPenalty(penalty) {
-        setEditPenaltyForm({
-            description: penalty.description
-        })
-        setEditPenaltyOn(penalty.id)
-    }
-
-    function updateDescription(e) {
-        const descriptionUpdate = e.target.value
-        setEditPenaltyForm({description: descriptionUpdate})
-    }
-
-    function submitUpdatedPenaltyForm(e) {
-        e.preventDefault();
-        fetch(`/penalties/${editPenaltyOn}`, {
+    function submitPenaltyForm(e, form, id) {
+        e.preventDefault()
+        fetch(`/penalties/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({...editPenaltyForm})
+            body: JSON.stringify(form)
         })
-        .then(resp=> resp.json())
+        .then(resp => resp.json())
         .then(data => {
-            setEditPenaltyOn(false)
+
         })
     }
 
@@ -224,7 +191,9 @@ const Game = ({ruleList, currentUser}) => {
         </TableContainer>
         <div>
             <h1>Penalty Tracker</h1>
-            {gameComments}
+            {penalties.map(penalty => {
+                return <Penalty key={penalty.id} penalty={penalty} players={players} ruleList={ruleList} submitPenaltyForm={submitPenaltyForm}/>
+            })}
         </div>
         </>
       );

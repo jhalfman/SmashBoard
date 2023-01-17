@@ -8,7 +8,7 @@ class PenaltiesController < ApplicationController
     def update
         penalty = Penalty.find(params[:id])
         if session[:user_id] == penalty.user_id
-            penalty.update!(description: params[:description])
+            penalty.update!(penalty_params)
             render json: penalty, status: :ok
         else
             render json:{errors: {user: "unauthorized user"}}, status: :unauthorized
