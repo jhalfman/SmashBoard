@@ -10,11 +10,14 @@ import Button from '@mui/material/Button';
 import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
+import PopoutText from './PopoutText';
 
-const Night = ({setCurrentNight}) => {
+const Night = ({setCurrentNight, ruleList}) => {
     const [games, setGames] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
+    const [players, setPlayers] = useState([])
+    const [nightName, setNightName] = useState("")
 
     useEffect(() => {
         fetch(`/nights/${id}`)
@@ -22,21 +25,27 @@ const Night = ({setCurrentNight}) => {
         .then(games => {
           setGames(games)
           setCurrentNight(id)
+          setNightName(games[0].night.name)
 
           const initialScore = {}
-          games.forEach(game => {
+          const playerList = []
+          games.forEach(game => {            
             game.player_characters.forEach(pc => {
               if (initialScore[pc.player_id]) {
                 return null
               }
-              else initialScore[pc.player_id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+              else {
+                initialScore[pc.player_id] = [pc.player.name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                playerList.push([pc.player.name, pc.player_id])
+              }
             })
             game.penalties.forEach(penalty => { 
-              initialScore[penalty.player_character.player_id][penalty.rule_id - 1] += 1
+              initialScore[penalty.player_character.player_id][penalty.rule_id] += 1
             })
           })
           const newScoreboard = {...initialScore}
           setScoreboard(newScoreboard)
+          setPlayers(playerList)
         })
     }, [id, setCurrentNight])
 
@@ -58,6 +67,9 @@ const Night = ({setCurrentNight}) => {
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
+            <h2>
+              {nightName}
+            </h2>
             <TableRow>
               <TableCell>Game Number</TableCell>
               <TableCell align="right">Time Limit</TableCell>
@@ -85,6 +97,36 @@ const Night = ({setCurrentNight}) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <h2>{nightName} Scoreboard</h2>
+      <hr></hr>
+      <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+              <TableCell><img alt="smash logo" id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
+                {ruleList.map(rule => {
+                    return <TableCell key={rule.id}>
+                        <PopoutText rule={rule}/>
+                        </TableCell>
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+                {players.map(pc => {
+                    return (
+                    <TableRow
+                    key={pc[0]}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                        {scoreboard ? scoreboard[pc[1]].map((tally, index) => {
+                            return <TableCell component="th" scope="row" key={index}>{tally}</TableCell>
+                        }) : null}
+                    </TableRow>
+                    )
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     );
 }

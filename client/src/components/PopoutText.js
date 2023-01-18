@@ -23,7 +23,7 @@ export default function PopoutText({rule, updatePenalty}) {
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
       >
-        <img alt={rule.name} className="rulesImage" src={rule.image} onClick={() => updatePenalty(rule.name, rule.id)}/>
+        {updatePenalty ? <img alt={rule.name} className="rulesImage" src={rule.image} onClick={() => updatePenalty(rule.name, rule.id)}/> : <img alt={rule.name} className="rulesImage" src={rule.image} />}
       </Typography>
       <Popover
         id="mouse-over-popover"

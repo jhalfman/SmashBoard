@@ -8,7 +8,7 @@ class NightsController < ApplicationController
     
     def show
         night = Night.find(params[:id])
-        render json: night.games, include: ["player_characters", "player_characters.player", "penalties", "penalties.player_character"], status: :ok
+        render json: night.games, include: ["player_characters", "player_characters.player", "penalties", "penalties.player_character", "night"], status: :ok
     end
 
     def create

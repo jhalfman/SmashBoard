@@ -65,7 +65,7 @@ function App() {
         <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
         <Route path='/nights' element={<NightsTable />}/>
         <Route path='/nights/new' element={<CreateNight />}/>
-        <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight}/>}/>
+        <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight} ruleList={ruleList}/>}/>
         <Route path='/games/new' element={<NewGame players={players} characters={characters} currentNight={currentNight}/>}/>
         <Route path='/games/:id' element={<Game ruleList={ruleList} currentUser={currentUser}/>}/>
       </Routes>
