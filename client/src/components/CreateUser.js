@@ -9,6 +9,7 @@ const CreateUser = ( {setCurrentUser} ) => {
         username: "",
         password: ""
     })
+    const [errors, setErrors] = useState(null)
     let navigate = useNavigate();
 
     function updateNewUserForm(e) {
@@ -28,21 +29,31 @@ const CreateUser = ( {setCurrentUser} ) => {
             },
             body: JSON.stringify({...newUserForm, admin: false})
         })
-        .then(resp => resp.json())
-        .then(user => {
-            setCurrentUser(user)
-            navigate(`/`)
+        .then(resp => {
+            if (resp.ok) {
+                resp.json().then(user => {
+                    setCurrentUser(user)
+                    navigate(`/`)
+                })
+            }
+            else {
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                    setErrors(errors)
+                }) 
+            }
         })
     }
 
   return (
     <form onSubmit={submitNewUserForm}>
         <h1>Enter username and password</h1>
+        {errors ? errors.map(error => <div className="errors" key={error}>{error}</div>) : null}
         <br></br>
-        <TextField required id="outlined-basic" label="Username" variant="outlined" name="username" onChange={updateNewUserForm}/>
+        <TextField required label="Username" variant="outlined" name="username" onChange={updateNewUserForm}/>
         <br></br>
         <br></br>
-        <TextField required id="outlined-basic" type="password" label="Password" variant="outlined"  name="password" onChange={updateNewUserForm}/>
+        <TextField required type="password" label="Password" variant="outlined"  name="password" onChange={updateNewUserForm}/>
         <br></br>
         <br></br>
         <Button type="submit" variant="contained">Create</Button>

@@ -186,22 +186,31 @@ const Game = ({ruleList, currentUser}) => {
             },
             body: JSON.stringify(form)
         })
-        .then(resp => resp.json())
-        .then(p => {
-            const newPenalties = penalties.map(penalty => {
-                if (penalty.id === p.id) {
-                    return p
-                }
-                else return penalty
-            })
-            setPenalties(newPenalties)
-
-            const newScoreboard = {...scoreboard}
-            newScoreboard[player_character_id][rule_id - 1] -= 1
-            newScoreboard[player_character_id][17] -= 1
-            newScoreboard[p.player_character_id][p.rule_id - 1] += 1
-            newScoreboard[p.player_character_id][17] += 1
-            setScoreboard(newScoreboard)
+        .then(resp => {
+            if (resp.ok) {
+                resp.json().then(p => {
+                    const newPenalties = penalties.map(penalty => {
+                        if (penalty.id === p.id) {
+                            return p
+                        }
+                        else return penalty
+                    })
+                    setPenalties(newPenalties)
+        
+                    const newScoreboard = {...scoreboard}
+                    newScoreboard[player_character_id][rule_id - 1] -= 1
+                    newScoreboard[player_character_id][17] -= 1
+                    newScoreboard[p.player_character_id][p.rule_id - 1] += 1
+                    newScoreboard[p.player_character_id][17] += 1
+                    setScoreboard(newScoreboard)
+                })
+            }
+            else {
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                    setErrors(errors)
+                })
+            }
         })
     }
 
@@ -209,14 +218,24 @@ const Game = ({ruleList, currentUser}) => {
         fetch(`/penalties/${id}`, {
             method: "DELETE"
         })
-
-        const newScoreboard = {...scoreboard}
-        newScoreboard[player_character_id][rule_id - 1] -= 1
-        newScoreboard[player_character_id][17] -= 1
-        setScoreboard(newScoreboard)
-
-        const newPenalties = penalties.filter(penalty => penalty.id !== id)
-        setPenalties(newPenalties)
+        .then(resp => {
+            if (resp.ok) {
+                const newScoreboard = {...scoreboard}
+                newScoreboard[player_character_id][rule_id - 1] -= 1
+                newScoreboard[player_character_id][17] -= 1
+                setScoreboard(newScoreboard)
+        
+                const newPenalties = penalties.filter(penalty => penalty.id !== id)
+                setPenalties(newPenalties)
+            }
+            else {
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                    setErrors(errors)
+                })
+            }
+        })
+        
     }
 
       return (
