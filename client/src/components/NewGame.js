@@ -8,7 +8,6 @@ import Select from '@mui/material/Select';
 import { useNavigate } from 'react-router-dom';
 
 const NewGame = ({players , characters, currentNight}) => {
-    //time, notes, night_id
     const [newGameForm, setNewGameForm] = useState({
         notes: "",
         time: 0,
@@ -22,6 +21,7 @@ const NewGame = ({players , characters, currentNight}) => {
         p4c: '',
         night_id: currentNight
     })
+    const [errors, setErrors] = useState(null)
     let navigate = useNavigate();
 
     function updateGameNotes(e) {
@@ -54,7 +54,10 @@ const NewGame = ({players , characters, currentNight}) => {
             resp.json().then(game => navigate(`/games/${game.id}`))
         }
         else
-            resp.json().then(error => console.log(error))
+            resp.json().then(data => {
+              const errors = Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)
+              setErrors(errors)
+            })
       })
     }
 
@@ -98,8 +101,8 @@ const NewGame = ({players , characters, currentNight}) => {
     const gameForm = (
       <form onSubmit={createNewGame}>
         <br></br>
-        <TextField id="outlined-basic" label="Game Notes" variant="outlined" onChange={updateGameNotes} value={newGameForm.notes}/>
-        <TextField id="outlined-basic" type="number" label="Time Limit (minutes)" variant="outlined" onChange={updateGameTime} value={newGameForm.time}/>
+        <TextField label="Game Notes" variant="outlined" onChange={updateGameNotes} value={newGameForm.notes}/>
+        <TextField type="number" label="Time Limit (minutes)" variant="outlined" onChange={updateGameTime} value={newGameForm.time}/>
         <br></br>
         <br></br>
         {createFormOptions()}
@@ -111,6 +114,7 @@ const NewGame = ({players , characters, currentNight}) => {
     
   return (
     <>
+    {errors ? errors.map(error => <div className="errors" key={error}>{error}</div>) : null}
     {gameForm}
     </>
   )
