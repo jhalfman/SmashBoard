@@ -152,6 +152,19 @@ const Game = ({ruleList, currentUser}) => {
         })
     }
 
+    function deletePenalty(id, player_character_id, rule_id) {
+        fetch(`/penalties/${id}`, {
+            method: "DELETE"
+        })
+
+        const newScoreboard = {...scoreboard}
+        newScoreboard[player_character_id][rule_id - 1] -= 1
+        setScoreboard(newScoreboard)
+
+        const newPenalties = penalties.filter(penalty => penalty.id !== id)
+        setPenalties(newPenalties)
+    }
+
       return (
         <>
         <TableContainer component={Paper}>
@@ -206,7 +219,7 @@ const Game = ({ruleList, currentUser}) => {
         <div>
             <h1>Penalty Tracker</h1>
             {penalties.map(penalty => {
-                return <Penalty key={penalty.id} penalty={penalty} players={players} ruleList={ruleList} submitPenaltyForm={submitPenaltyForm}/>
+                return <Penalty key={penalty.id} penalty={penalty} players={players} ruleList={ruleList} submitPenaltyForm={submitPenaltyForm} deletePenalty={deletePenalty}/>
             })}
         </div>
         </>

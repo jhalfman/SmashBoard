@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {useState} from 'react';
 
-const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
+const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty}) => {
     const [playerName, setPlayerName] = useState("")
     const [characterName, setCharacterName] = useState("")
     const [ruleName, setRuleName] = useState("")
@@ -40,10 +40,6 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
         })
     }
 
-    function deletePenalty() {
-        console.log("delete")
-    }
-
     const penaltyDiv = <div>
         <p>Rule: {ruleName} Player: {playerName} ({characterName}) - {penalty.description} - {penalty.created_at}</p>
         <button onClick={() => setPenaltyEditorOn(true)}>EDIT</button>
@@ -65,7 +61,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
         <button type="button" onClick={cancelEdit}>Cancel Edit</button>
         <button>Submit</button>
         <br></br>
-        <button type="button" onClick={deletePenalty}>DELETE Penalty</button>
+        <button type="button" onClick={() => deletePenalty(penalty.id, penalty.player_character_id, penalty.rule_id)}>DELETE Penalty</button>
         <hr></hr>
     </form>
 

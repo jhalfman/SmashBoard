@@ -15,6 +15,12 @@ class PenaltiesController < ApplicationController
         end        
     end
 
+    def destroy
+        penalty = Penalty.find(params[:id])
+        penalty.destroy
+        head :no_content
+    end
+
         private
 
     def penalty_params
