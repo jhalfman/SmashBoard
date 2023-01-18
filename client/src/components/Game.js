@@ -41,13 +41,14 @@ const Game = ({ruleList, currentUser}) => {
             
             const initialScore = {}
             game.player_characters.forEach(pc => {
-                initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                initialScore[pc.id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             })
             const newScoreboard = {...initialScore}
             
             const newPenalties = game.penalties.map(penalty => {
                 // increment score for each penalty
                 newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+                newScoreboard[penalty.player_character_id][17] += 1
                 return penalty
             })
             setPenalties(newPenalties.sort(function(x, y) {return x.id - y.id}))
@@ -118,6 +119,7 @@ const Game = ({ruleList, currentUser}) => {
         .then(penalty => {
              const newScoreboard = {...scoreboard}
              newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+             newScoreboard[penalty.player_character_id][17] += 1
              setScoreboard(newScoreboard)
              setPenalties([
                 ...penalties,
@@ -144,6 +146,7 @@ const Game = ({ruleList, currentUser}) => {
             .then(penalty => {
                 const newScoreboard = {...scoreboard}
                 newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+                newScoreboard[penalty.player_character_id][17] += 1
                 setScoreboard({...newScoreboard})
                 newPenaltyList.push(penalty)
                 if (newPenaltyList.length === screenClearPlayers.length) {
@@ -181,7 +184,9 @@ const Game = ({ruleList, currentUser}) => {
 
             const newScoreboard = {...scoreboard}
             newScoreboard[player_character_id][rule_id - 1] -= 1
+            newScoreboard[player_character_id][17] -= 1
             newScoreboard[p.player_character_id][p.rule_id - 1] += 1
+            newScoreboard[p.player_character_id][17] += 1
             setScoreboard(newScoreboard)
         })
     }
@@ -193,6 +198,7 @@ const Game = ({ruleList, currentUser}) => {
 
         const newScoreboard = {...scoreboard}
         newScoreboard[player_character_id][rule_id - 1] -= 1
+        newScoreboard[player_character_id][17] -= 1
         setScoreboard(newScoreboard)
 
         const newPenalties = penalties.filter(penalty => penalty.id !== id)
@@ -231,6 +237,7 @@ const Game = ({ruleList, currentUser}) => {
                         <PopoutText rule={rule} updatePenalty={updatePenalty}/>
                         </TableCell>
                 })}
+                <TableCell>Total</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
