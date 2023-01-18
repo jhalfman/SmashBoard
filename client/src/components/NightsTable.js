@@ -11,7 +11,7 @@ import { NavLink as Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 
 
-export default function NightsTable() {
+export default function NightsTable({setNightName}) {
 
   const [nights, setNights] = useState([])
 
@@ -52,7 +52,7 @@ export default function NightsTable() {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-              <Link style={{color:"blue"}} to={`/nights/${row.id}`}>{row.name}</Link>
+              <Link style={{color:"blue"}} to={`/nights/${row.id}`} onClick={() => setNightName(row.name)}>{row.name}</Link>
               </TableCell>
               <TableCell align="right">{row.user}</TableCell>
               <TableCell align="right">{row.date} @ {row.time}</TableCell>

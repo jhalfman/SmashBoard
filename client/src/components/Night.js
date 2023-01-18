@@ -12,45 +12,46 @@ import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import PopoutText from './PopoutText';
 
-const Night = ({setCurrentNight, ruleList}) => {
+const Night = ({setCurrentNight, ruleList, nightName, setNightName}) => {
     const [games, setGames] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
     const [players, setPlayers] = useState([])
-    const [nightName, setNightName] = useState("")
 
     useEffect(() => {
         fetch(`/nights/${id}`)
         .then(resp => resp.json())
         .then(games => {
-          if (games.length > 0) {
-          setGames(games)
-          setCurrentNight(id)
-          setNightName(games[0].night.name)
 
-          const initialScore = {}
-          const playerList = []
-          games.forEach(game => {            
-            game.player_characters.forEach(pc => {
-              if (initialScore[pc.player_id]) {
-                return null
-              }
-              else {
-                initialScore[pc.player_id] = [pc.player.name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                playerList.push([pc.player.name, pc.player_id])
-              }
+          setCurrentNight(id)
+
+          if (games.length > 0) {
+            setGames(games)
+            setNightName(games[0].night.name)
+
+            const initialScore = {}
+            const playerList = []
+            games.forEach(game => {            
+              game.player_characters.forEach(pc => {
+                if (initialScore[pc.player_id]) {
+                  return null
+                }
+                else {
+                  initialScore[pc.player_id] = [pc.player.name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                  playerList.push([pc.player.name, pc.player_id])
+                }
+              })
+              game.penalties.forEach(penalty => { 
+                initialScore[penalty.player_character.player_id][penalty.rule_id] += 1
+                initialScore[penalty.player_character.player_id][18] += 1
+              })
             })
-            game.penalties.forEach(penalty => { 
-              initialScore[penalty.player_character.player_id][penalty.rule_id] += 1
-              initialScore[penalty.player_character.player_id][18] += 1
-            })
-          })
-          const newScoreboard = {...initialScore}
-          setScoreboard(newScoreboard)
-          setPlayers(playerList)
-        }
+            const newScoreboard = {...initialScore}
+            setScoreboard(newScoreboard)
+            setPlayers(playerList)
+          }
         })
-    }, [id, setCurrentNight])
+    }, [id, setCurrentNight, setNightName])
 
     function createData(length, penalties, notes, id, pcs) {
       return {length, penalties, notes, id, pcs};
