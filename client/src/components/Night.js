@@ -14,13 +14,29 @@ import { useParams } from 'react-router-dom';
 const Night = ({setCurrentNight}) => {
     const [games, setGames] = useState([])
     const {id} = useParams();
+    const [scoreboard, setScoreboard] = useState(null)
 
     useEffect(() => {
         fetch(`/nights/${id}`)
         .then(resp => resp.json())
-        .then(data => {
-          setGames(data)
+        .then(games => {
+          setGames(games)
           setCurrentNight(id)
+
+          const initialScore = {}
+          games.forEach(game => {
+            game.player_characters.forEach(pc => {
+              if (initialScore[pc.player_id]) {
+                return null
+              }
+              else initialScore[pc.player_id] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            })
+            game.penalties.forEach(penalty => { 
+              initialScore[penalty.player_character.player_id][penalty.rule_id - 1] += 1
+            })
+          })
+          const newScoreboard = {...initialScore}
+          setScoreboard(newScoreboard)
         })
     }, [id, setCurrentNight])
 
