@@ -98,6 +98,14 @@ const Game = ({ruleList, currentUser}) => {
 
     function createNewPenalty(e) {
         e.preventDefault();
+        if (newPenalty.rule_id === 2) {
+            screenClear()
+        }
+        else regularPenalty();
+        cancelEventSelect()
+    }
+
+    function regularPenalty() {
         fetch(`/penalties`, {
             method: "POST",
             headers: {
@@ -115,8 +123,33 @@ const Game = ({ruleList, currentUser}) => {
                 penalty
              ])
         })
-        cancelEventSelect()
+    }
 
+    function screenClear() {
+        const newPenaltyList = []
+        const screenClearPlayers = players.filter(player => player.id!== newPenalty.player_character_id)
+        screenClearPlayers.map(player => {
+            const screenClearForm = {
+                ...newPenalty, "game_id": id, "user_id": currentUser.id, player_character_id: player.id
+            }
+            fetch(`/penalties`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(screenClearForm)
+            })
+            .then(resp => resp.json())
+            .then(penalty => {
+                const newScoreboard = {...scoreboard}
+                newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+                setScoreboard({...newScoreboard})
+                newPenaltyList.push(penalty)
+                if (newPenaltyList.length === screenClearPlayers.length) {
+                    setPenalties([...penalties, ...newPenaltyList])
+                }
+            })       
+        })      
     }
 
     const penaltyDescriptionForm = (
