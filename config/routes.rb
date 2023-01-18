@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :show]
   resources :rules, only: [:index]
   resources :player_characters, only: [:index]
-  resources :players, only: [:index, :create]
+  resources :players, only: [:index, :create, :update]
   resources :characters, only: [:index]
 
   post "/login", to: "sessions#create"

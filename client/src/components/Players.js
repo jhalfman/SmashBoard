@@ -2,8 +2,9 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {useState} from 'react';
+import Player from './Player';
 
-const Players = ({players, createNewPlayer, errors}) => {
+const Players = ({players, createNewPlayer, errors, setPlayers, admin}) => {
     const [newPlayerForm, setNewPlayerForm] = useState({
         name: ""
     })
@@ -26,8 +27,11 @@ const Players = ({players, createNewPlayer, errors}) => {
          {showNewForm ? <Button type="submit" variant="contained">Create</Button> : null}
          </form>
         {players.map(player => {
-            return <div key={player.name}>{player.name}</div>
+            return <Player key={player.name} player={player} setPlayers={setPlayers} players={players}/>
         })}
+        <br></br>
+        <br></br>
+        {admin ? <button>View Retired Players</button> : null}
     </div>
   )
 }

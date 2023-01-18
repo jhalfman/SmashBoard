@@ -1,4 +1,5 @@
 class PenaltiesController < ApplicationController
+    skip_before_action :is_admin
 
     def create
         penalty = Penalty.create!(penalty_params)

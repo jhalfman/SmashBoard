@@ -1,5 +1,6 @@
 class NightsController < ApplicationController
     skip_before_action :authenticate_user, only: [:index, :show]
+    skip_before_action :is_admin
 
     def index
         nights = Night.all

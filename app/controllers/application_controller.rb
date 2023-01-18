@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
   before_action :authenticate_user
+  before_action :is_admin
 
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
@@ -16,8 +17,12 @@ class ApplicationController < ActionController::API
   end
 
   def is_admin
-    admin = current_user.admin?
-    render json: {errors: {user: "no admin access"}}, status: :forbidden unless admin
+    if current_user
+      admin = current_user.admin
+      render json: {errors: {user: "does not have admin access"}}, status: :forbidden unless admin
+    else
+      render json: {errors: {user: "is not logged in"}}, status: :forbidden
+    end
   end
 
   def render_unprocessable_entity invalid

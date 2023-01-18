@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
     skip_before_action :authenticate_user, only: [:show]
+    skip_before_action :is_admin
 
     def show
         game = Game.find(params[:id])
