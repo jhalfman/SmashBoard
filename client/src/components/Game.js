@@ -31,6 +31,7 @@ const Game = ({ruleList, currentUser}) => {
     const [submitSelectOn, setSubmitSelectOn] = useState(false)
     const [penalties, setPenalties] = useState([])
     const [currentPenalty, setCurrentPenalty] = useState(null)
+    const [errors, setErrors] = useState(null)
 
     useEffect(() => {
         fetch(`/games/${id}`)
@@ -108,24 +109,37 @@ const Game = ({ruleList, currentUser}) => {
     }
 
     function regularPenalty() {
-        fetch(`/penalties`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({...newPenalty, "game_id": id, "user_id": currentUser.id})
-        })
-        .then(resp => resp.json())
-        .then(penalty => {
-             const newScoreboard = {...scoreboard}
-             newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
-             newScoreboard[penalty.player_character_id][17] += 1
-             setScoreboard(newScoreboard)
-             setPenalties([
-                ...penalties,
-                penalty
-             ])
-        })
+        if (currentUser) {
+            fetch(`/penalties`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({...newPenalty, "game_id": id, "user_id": currentUser.id})
+            })
+            .then(resp => {
+                if (resp.ok) {
+                    resp.json().then(penalty => {
+                        const newScoreboard = {...scoreboard}
+                        newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+                        newScoreboard[penalty.player_character_id][17] += 1
+                        setScoreboard(newScoreboard)
+                        setPenalties([
+                            ...penalties,
+                            penalty
+                        ])
+                    })
+                }
+                else
+                    resp.json().then(data => {
+                        const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                        setErrors(errors)
+                    })
+            })
+        }
+        else {
+            setErrors(["User must be logged in"])
+        }  
     }
 
     function screenClear() {
@@ -207,6 +221,7 @@ const Game = ({ruleList, currentUser}) => {
 
       return (
         <>
+        {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
