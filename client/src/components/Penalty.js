@@ -11,7 +11,6 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
         description: penalty.description
     })
     const [penaltyEditorOn, setPenaltyEditorOn] = useState(false)
-    console.log(penalty)
 
     useEffect(() => {
         const player = players.find(pc => pc.id === penalty.player_character_id).player.name
@@ -22,7 +21,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
 
         const rule = ruleList.find(rule => rule.id === penalty.rule_id).name
         setRuleName(rule)
-    }, [ruleList, penalty])
+    }, [ruleList, penalty, players])
 
     function updateEditPenaltyForm(e) {
         const updatedForm = {
@@ -48,9 +47,10 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
     const penaltyDiv = <div>
         <p>Rule: {ruleName} Player: {playerName} ({characterName}) - {penalty.description} - {penalty.created_at}</p>
         <button onClick={() => setPenaltyEditorOn(true)}>EDIT</button>
+        <hr></hr>
     </div>
 
-    const penaltyForm = <form onSubmit={(e) => {submitPenaltyForm(e, editPenaltyForm, penalty.id); setPenaltyEditorOn(false)}}>
+    const penaltyForm = <form onSubmit={(e) => {submitPenaltyForm(e, editPenaltyForm, penalty.id, penalty.player_character_id, penalty.rule_id); setPenaltyEditorOn(false)}}>
         <select name="rule_id" value={editPenaltyForm.rule_id} onChange={updateEditPenaltyForm}>
             {ruleList.map(rule => {
                 return <option key={rule.id} value={rule.id}>{rule.name}</option>
@@ -66,6 +66,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
         <button>Submit</button>
         <br></br>
         <button type="button" onClick={deletePenalty}>DELETE Penalty</button>
+        <hr></hr>
     </form>
 
   return (
@@ -73,20 +74,6 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm}) => {
     {penaltyEditorOn ? penaltyForm : penaltyDiv}
     </>
   )
-            //     const rule = (ruleList.length !== 0 ? ruleList.find(rule => rule.id === penalty.rule_id).name : "loading")
-            //     return (
-            //         (penalty.id !== editPenaltyOn) ? <p key={penalty.id} id={penalty.id}>{penalty.created_at} - Penalty: {rule} - Player: {playerName} ({character}) - {penalty.description} <button onClick={() => editPenalty(penalty)}>EDIT</button></p> : 
-            //         <div key={penalty.id}>
-            //         <p id={penalty.id}>{penalty.created_at} - Penalty: {rule} - Player: {playerName} ({character}) - {penalty.description} <button onClick={() => setEditPenaltyOn(false)}>Cancel Edit</button></p>
-            //         <form onSubmit={submitUpdatedPenaltyForm}>
-            //             Update Description: <input type="text" id="description" onChange={updateDescription} value={editPenaltyForm.description}></input>
-            //             <button>Confirm Update</button>
-            //         </form>
-            //         <button>Delete Penalty</button>
-            //         </div>
-                
-            //     )
-            // })
 }
 
 export default Penalty

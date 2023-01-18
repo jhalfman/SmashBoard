@@ -27,7 +27,6 @@ const Game = ({ruleList, currentUser}) => {
     })
     const [currentPenaltySelected, setCurrentPenaltySelected] = useState("")
     const [currentPlayerSelected, setCurrentPlayerSelected] = useState("")
-    const [gameComments, setGameComments] = useState([])
     const [eventSelectOn, setEventSelectOn] = useState(false)
     const [submitSelectOn, setSubmitSelectOn] = useState(false)
     const [penalties, setPenalties] = useState([])
@@ -111,10 +110,10 @@ const Game = ({ruleList, currentUser}) => {
              const newScoreboard = {...scoreboard}
              newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
              setScoreboard(newScoreboard)
-             setPenalties({
+             setPenalties([
                 ...penalties,
                 penalty
-             })
+             ])
         })
         cancelEventSelect()
 
@@ -127,7 +126,7 @@ const Game = ({ruleList, currentUser}) => {
         </form>
     )
 
-    function submitPenaltyForm(e, form, id) {
+    function submitPenaltyForm(e, form, id, player_character_id, rule_id) {
         e.preventDefault()
         fetch(`/penalties/${id}`, {
             method: "PATCH",
@@ -145,6 +144,11 @@ const Game = ({ruleList, currentUser}) => {
                 else return penalty
             })
             setPenalties(newPenalties)
+
+            const newScoreboard = {...scoreboard}
+            newScoreboard[player_character_id][rule_id - 1] -= 1
+            newScoreboard[p.player_character_id][p.rule_id - 1] += 1
+            setScoreboard(newScoreboard)
         })
     }
 
