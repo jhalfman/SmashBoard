@@ -23,6 +23,7 @@ const Night = ({setCurrentNight, ruleList}) => {
         fetch(`/nights/${id}`)
         .then(resp => resp.json())
         .then(games => {
+          if (games.length > 0) {
           setGames(games)
           setCurrentNight(id)
           setNightName(games[0].night.name)
@@ -35,17 +36,19 @@ const Night = ({setCurrentNight, ruleList}) => {
                 return null
               }
               else {
-                initialScore[pc.player_id] = [pc.player.name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                initialScore[pc.player_id] = [pc.player.name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 playerList.push([pc.player.name, pc.player_id])
               }
             })
             game.penalties.forEach(penalty => { 
               initialScore[penalty.player_character.player_id][penalty.rule_id] += 1
+              initialScore[penalty.player_character.player_id][18] += 1
             })
           })
           const newScoreboard = {...initialScore}
           setScoreboard(newScoreboard)
           setPlayers(playerList)
+        }
         })
     }, [id, setCurrentNight])
 
@@ -64,12 +67,12 @@ const Night = ({setCurrentNight, ruleList}) => {
       <div>
       <Link to="/games/new"><Button variant="contained" color="success">Add Game</Button></Link>
       <Link to="/nights"><Button variant="contained" color="success">Back to Night List</Button></Link>
+      <h2>
+        {nightName} Games
+      </h2>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
-            <h2>
-              {nightName} Games
-            </h2>
             <TableRow>
               <TableCell>Game Number</TableCell>
               <TableCell align="right">Time Limit</TableCell>
@@ -109,6 +112,7 @@ const Night = ({setCurrentNight, ruleList}) => {
                         <PopoutText rule={rule}/>
                         </TableCell>
                 })}
+                <TableCell>Total</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

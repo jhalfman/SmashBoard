@@ -27,7 +27,6 @@ export default function NightsTable() {
   
   const nightRows = nights.map(night => {
     const parsedDate = night.created_at.split("T")
-    console.log(parsedDate[0], parsedDate[1].slice(0,8))
     return createData(night.name, night.user.username, parsedDate[0], parsedDate[1].slice(0,8), night.games.length, night.id)
   })
 
