@@ -23,6 +23,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 const Game = ({ruleList, currentUser, admin}) => {
     const [nightId, setNightId] = useState(null)
     const [gameName, setgameName] = useState("")
+    const [gameTime, setGameTime] = useState(0)
     const [players, setPlayers] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
@@ -30,6 +31,10 @@ const Game = ({ruleList, currentUser, admin}) => {
         player_character_id: "",
         rule_id: "",
         description: ""
+    })
+    const [editGameForm, setEditGameForm] = useState({
+        notes: gameName,
+        time: gameTime
     })
     const [currentPenaltySelected, setCurrentPenaltySelected] = useState("")
     const [currentPlayerSelected, setCurrentPlayerSelected] = useState("")
@@ -39,6 +44,7 @@ const Game = ({ruleList, currentUser, admin}) => {
     const [currentPenalty, setCurrentPenalty] = useState(null)
     const [errors, setErrors] = useState(null)
     const [open, setOpen] = React.useState(false)
+    const [editGameOn, setEditGameOn] = useState(false)
     let navigate = useNavigate()
 
     const handleClickOpen = () => {
@@ -56,6 +62,11 @@ const Game = ({ruleList, currentUser, admin}) => {
         .then(game => {
             setNightId(game.night.id)
             setgameName(game.notes)
+            setGameTime(game.time)
+            setEditGameForm({
+                notes: game.notes,
+                time: game.time
+            })
             setPlayers(game.player_characters)
             
             const initialScore = {}
@@ -273,6 +284,43 @@ const Game = ({ruleList, currentUser, admin}) => {
           })
     }
 
+    function editGame(e) {
+        setEditGameForm({
+            ...editGameForm,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    function updateGameInfo(e) {
+        e.preventDefault();
+        fetch(`/games/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(editGameForm)
+        })
+        .then(resp => {
+            if (resp.ok) {
+                resp.json().then(game => {
+                    setgameName(game.notes)
+                    setGameTime(game.time)
+                    setEditGameForm({
+                        notes: game.notes,
+                        time: game.time
+                    })
+                })
+                setEditGameOn(false)
+            }
+            else {
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)
+                    setErrors(errors)
+                  })
+            }
+        })
+    }
+
     const confirmationAlert = (
         <div>
           <Button variant="contained" color="error" onClick={handleClickOpen}>
@@ -309,12 +357,18 @@ const Game = ({ruleList, currentUser, admin}) => {
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
                 <TableRow>
-                    <TableCell>Game: {gameName}</TableCell>
+                    {editGameOn ? <TableCell><form onSubmit={updateGameInfo}>
+                        Game: <input name="notes" type="text" value={editGameForm.notes} onChange={editGame}></input>
+                        Time: <input name="time" type="number" value={editGameForm.time} onChange={editGame}></input>
+                        <button>submit</button>
+                        <button type='button' onClick={() => {setEditGameOn(false); setEditGameForm({notes: gameName, time: gameTime})}}>cancel</button>
+                    </form></TableCell> : <TableCell>Game: {gameName} <hr></hr> Time: {gameTime} minutes</TableCell>}
                     <TableCell><Link to={`/nights/${nightId}`}><Button variant="contained" color="success">Back to Game List</Button></Link></TableCell>
                     <TableCell>
                         <Button variant="contained" color="success" onClick={eventSelect}>Add Event</Button>
                         {eventSelectOn ? <Button variant="contained" color="error" onClick={() => cancelEventSelect()}>Cancel Event</Button> : null}
                     </TableCell>
+                    {admin || currentUser ? <TableCell><Button variant="contained" color="warning" onClick={() => setEditGameOn(true)}>Edit Game</Button></TableCell> : null}
                     {admin ? <TableCell>{confirmationAlert}</TableCell> : null}
                     
                     {eventSelectOn ? <TableCell></TableCell> : null}

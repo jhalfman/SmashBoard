@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   
   resources :penalties, only: [:create, :update, :destroy]
   resources :player_character_games, only: []
-  resources :games, only: [:show, :create, :destroy]
+  resources :games, only: [:show, :create, :destroy, :update]
   resources :nights, only: [:index, :show, :create, :destroy]
   resources :users, only: [:create, :show]
   resources :rules, only: [:index]
