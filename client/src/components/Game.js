@@ -30,6 +30,7 @@ const Game = ({ruleList, currentUser}) => {
     const [eventSelectOn, setEventSelectOn] = useState(false)
     const [submitSelectOn, setSubmitSelectOn] = useState(false)
     const [penalties, setPenalties] = useState([])
+    const [currentPenalty, setCurrentPenalty] = useState(null)
 
     useEffect(() => {
         fetch(`/games/${id}`)
@@ -128,7 +129,7 @@ const Game = ({ruleList, currentUser}) => {
     function screenClear() {
         const newPenaltyList = []
         const screenClearPlayers = players.filter(player => player.id!== newPenalty.player_character_id)
-        screenClearPlayers.map(player => {
+        screenClearPlayers.forEach(player => {
             const screenClearForm = {
                 ...newPenalty, "game_id": id, "user_id": currentUser.id, player_character_id: player.id
             }
@@ -252,7 +253,7 @@ const Game = ({ruleList, currentUser}) => {
         <div>
             <h1>Penalty Tracker</h1>
             {penalties.map(penalty => {
-                return <Penalty key={penalty.id} penalty={penalty} players={players} ruleList={ruleList} submitPenaltyForm={submitPenaltyForm} deletePenalty={deletePenalty}/>
+                return <Penalty key={penalty.id} penalty={penalty} players={players} ruleList={ruleList} submitPenaltyForm={submitPenaltyForm} deletePenalty={deletePenalty} setCurrentPenalty={setCurrentPenalty} currentPenalty={currentPenalty}/>
             })}
         </div>
         </>

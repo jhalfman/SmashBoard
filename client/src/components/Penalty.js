@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {useState} from 'react';
 
-const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty}) => {
+const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty, setCurrentPenalty, currentPenalty}) => {
     const [playerName, setPlayerName] = useState("")
     const [characterName, setCharacterName] = useState("")
     const [ruleName, setRuleName] = useState("")
@@ -19,8 +19,9 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty})
         const character = players.find(pc => pc.id === penalty.player_character_id).character.name
         setCharacterName(character)
 
-        const rule = ruleList.find(rule => rule.id === penalty.rule_id).name
+        const rule = ruleList.length > 0 ? ruleList.find(rule => rule.id === penalty.rule_id).name : null
         setRuleName(rule)
+
     }, [ruleList, penalty, players])
 
     function updateEditPenaltyForm(e) {
@@ -42,7 +43,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty})
 
     const penaltyDiv = <div>
         <p>Rule: {ruleName} Player: {playerName} ({characterName}) - {penalty.description}</p>
-        <p>{penalty.created_at.split("T")[0]} @ {penalty.created_at.split("T")[1].slice(0,8)}  <button onClick={() => setPenaltyEditorOn(true)}>EDIT</button></p>
+        <p>{penalty.created_at.split("T")[0]} @ {penalty.created_at.split("T")[1].slice(0,8)}  <button onClick={() => {setPenaltyEditorOn(true); setCurrentPenalty(penalty.id)}}>EDIT</button></p>
         <hr></hr>
     </div>
 
@@ -67,7 +68,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty})
 
   return (
     <>
-    {penaltyEditorOn ? penaltyForm : penaltyDiv}
+    {currentPenalty === penalty.id ? (penaltyEditorOn ? penaltyForm : penaltyDiv) : penaltyDiv}
     </>
   )
 }
