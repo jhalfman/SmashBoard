@@ -54,6 +54,7 @@ function App() {
       if (resp.ok) {
         resp.json().then(data => {
           setPlayers([...players, data])
+          setErrors(null)
         })
       }
       else
@@ -67,12 +68,11 @@ function App() {
   return (
     <div className="App">
       <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-      {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
       <Routes>
         <Route path='/' element={<Home currentUser={currentUser}/>}/>
         <Route path='/login' element={<Login setCurrentUser={setCurrentUser}/>}/>
         <Route path='/user/new' element={<CreateUser setCurrentUser={setCurrentUser}/>}/>
-        <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer}/>}/>
+        <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer} errors={errors}/>}/>
         <Route path='/nights' element={<NightsTable setNightName={setNightName}/>}/>
         <Route path='/nights/new' element={<CreateNight setNightName={setNightName}/>}/>
         <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight} ruleList={ruleList} nightName={nightName} setNightName={setNightName}/>}/>

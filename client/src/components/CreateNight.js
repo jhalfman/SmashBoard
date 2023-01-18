@@ -9,6 +9,7 @@ const CreateNight = ({setNightName}) => {
     const [nightForm, setNightForm] = useState({
         name: ""
     })
+    const [errors, setErrors] = useState(null)
     let navigate = useNavigate();
 
     function updateNightForm(e) {
@@ -31,12 +32,17 @@ const CreateNight = ({setNightName}) => {
                 resp.json().then(data => {setNightName(data.name); navigate(`/nights/${data.id}`)})
             }
             else
-                resp.json().then(error => console.log(error))
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                    setErrors(errors)
+                })
         })
     }
 
+
   return (
     <>
+    {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
     <form onSubmit={(e) => submitNightForm(e)}>
         <label>Enter a title for a new game session</label>
         <br></br>

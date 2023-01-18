@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {useState} from 'react';
 
-const Players = ({players, createNewPlayer}) => {
+const Players = ({players, createNewPlayer, errors}) => {
     const [newPlayerForm, setNewPlayerForm] = useState({
         name: ""
     })
@@ -15,6 +15,7 @@ const Players = ({players, createNewPlayer}) => {
 
     return (
     <div>
+        {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
         <br></br>
         <Button variant="contained" color="success" onClick={() => setShowNewForm(!showNewForm)}>Add Player Tag</Button>
         <br></br>
