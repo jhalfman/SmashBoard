@@ -49,7 +49,8 @@ const Game = ({ruleList, currentUser}) => {
                 newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
                 return penalty
             })
-            setPenalties(newPenalties)
+            console.log(newPenalties.sort(function(x, y) {return x.id - y.id}))
+            setPenalties(newPenalties.sort(function(x, y) {return x.id - y.id}))
             setScoreboard(newScoreboard)
         })
     }, [ruleList, id])
