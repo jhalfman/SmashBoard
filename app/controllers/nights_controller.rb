@@ -1,6 +1,6 @@
 class NightsController < ApplicationController
     skip_before_action :authenticate_user, only: [:index, :show]
-    skip_before_action :is_admin, except: [:destroy, :update]
+    skip_before_action :is_admin, except: [:destroy]
 
     def index
         nights = Night.all
@@ -19,7 +19,7 @@ class NightsController < ApplicationController
 
     def update
         night = Night.find(params[:id])
-        if session[:user_id] == night.user_id
+        if session[:user_id] == night.user_id || current_user.admin
             night.update!(night_params)
             render json: night, status: :ok
         else
