@@ -5,7 +5,7 @@ import { NavLink as Link} from 'react-router-dom';
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CreateNight = ({setNightName}) => {
+const CreateNight = ({setNightName, currentUser}) => {
     const [nightForm, setNightForm] = useState({
         name: ""
     })
@@ -25,7 +25,7 @@ const CreateNight = ({setNightName}) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({...nightForm, user_id: 1})
+            body: JSON.stringify({...nightForm, user_id: currentUser.id})
         })
         .then(resp => {
             if (resp.ok) {

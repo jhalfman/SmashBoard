@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import { NavLink as Link, useNavigate} from 'react-router-dom';
+import {NavLink as Link, useNavigate} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import PopoutText from './PopoutText';
@@ -17,13 +17,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const Night = ({setCurrentNight, ruleList, nightName, setNightName, admin}) => {
+const Night = ({setCurrentNight, ruleList, nightName, setNightName, admin, currentUser}) => {
     const [games, setGames] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
     const [players, setPlayers] = useState([])
     const [errors, setErrors] = useState(null)
     const [open, setOpen] = React.useState(false);
+    const [nightNameForm, setNightNameForm] = useState({name: nightName})
+    const [editNightNameOn, setEditNightNameOn] = useState(false)
     let navigate = useNavigate();
 
   const handleClickOpen = () => {
@@ -102,6 +104,36 @@ const Night = ({setCurrentNight, ruleList, nightName, setNightName, admin}) => {
       return createData(game.time, game.penalties.length, game.notes, game.id, pcs)
     })
 
+    function updateNightNameForm(e) {
+      setNightNameForm({name: e.target.value})
+    }
+
+    function submitNightNameForm(e) {
+      e.preventDefault();
+      fetch(`/nights/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nightNameForm)
+      })
+      .then(resp => {
+        if (resp.ok) {
+            resp.json().then(night => {
+                setNightName(night.name)
+                setNightNameForm({night: night.name})
+            })
+            setEditNightNameOn(false)
+        }
+        else {
+            resp.json().then(data => {
+                const errors = Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)
+                setErrors(errors)
+              })
+        }
+    })
+    }
+
     const confirmationAlert = (
       <div>
         <Button variant="contained" color="error" onClick={handleClickOpen}>
@@ -137,11 +169,14 @@ const Night = ({setCurrentNight, ruleList, nightName, setNightName, admin}) => {
       <div>
       <Link to="/games/new"><Button variant="contained" color="success">Add Game</Button></Link>
       <Link to="/nights"><Button variant="contained" color="success">Back to Night List</Button></Link>
+      {admin || currentUser ? <Button variant="contained" color="warning" onClick={() => setEditNightNameOn(true)}>Edit Night Name</Button> : null}
       {admin ? confirmationAlert : null}
       {errors ? errors.map(error => <div className="errors" key={error}>{error}</div>) : null}
-      <h2>
-        {nightName} Games
-      </h2>
+      {editNightNameOn ? <form onSubmit={submitNightNameForm}>
+        <input type="text" name="name" value={nightNameForm.name} onChange={updateNightNameForm}></input>
+        <button type="button" onClick={() => {setEditNightNameOn(false); setNightNameForm({name: nightName})}}>cancel</button>
+        <button>submit</button>
+      </form> : <h2>{nightName} Games</h2>}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>

@@ -1,6 +1,6 @@
 class NightsController < ApplicationController
     skip_before_action :authenticate_user, only: [:index, :show]
-    skip_before_action :is_admin, except: [:destroy]
+    skip_before_action :is_admin, except: [:destroy, :update]
 
     def index
         nights = Night.all
@@ -15,6 +15,16 @@ class NightsController < ApplicationController
     def create
         night = Night.create!(night_params)
         render json: night, status: :created
+    end
+
+    def update
+        night = Night.find(params[:id])
+        if session[:user_id] == night.user_id
+            night.update!(night_params)
+            render json: night, status: :ok
+        else
+            render json:{errors: {user: "unauthorized user"}}, status: :unauthorized
+        end       
     end
 
     def destroy

@@ -71,12 +71,12 @@ function App() {
       <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>
       <Routes>
         <Route path='/' element={<Home currentUser={currentUser}/>}/>
-        <Route path='/login' element={<Login setCurrentUser={setCurrentUser}/>}/>
+        <Route path='/login' element={<Login setCurrentUser={setCurrentUser} setAdmin={setAdmin}/>}/>
         <Route path='/user/new' element={<CreateUser setCurrentUser={setCurrentUser}/>}/>
         <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer} errors={errors} setPlayers={setPlayers} admin={admin} setErrors={setErrors}/>}/>
-        <Route path='/nights' element={<NightsTable setNightName={setNightName}/>}/>
-        <Route path='/nights/new' element={<CreateNight setNightName={setNightName}/>}/>
-        <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight} ruleList={ruleList} nightName={nightName} setNightName={setNightName} admin={admin}/>}/>
+        <Route path='/nights' element={<NightsTable setNightName={setNightName} currentUser={currentUser}/>}/>
+        <Route path='/nights/new' element={<CreateNight setNightName={setNightName} currentUser={currentUser}/>}/>
+        <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight} ruleList={ruleList} nightName={nightName} setNightName={setNightName} admin={admin} currentUser={currentUser}/>}/>
         <Route path='/games/new' element={<NewGame players={players} characters={characters} currentNight={currentNight}/>}/>
         <Route path='/games/:id' element={<Game ruleList={ruleList} currentUser={currentUser} admin={admin}/>}/>
       </Routes>
