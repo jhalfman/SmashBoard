@@ -1,6 +1,6 @@
 class NightsController < ApplicationController
     skip_before_action :authenticate_user, only: [:index, :show]
-    skip_before_action :is_admin
+    skip_before_action :is_admin, except: [:destroy]
 
     def index
         nights = Night.all
@@ -15,6 +15,12 @@ class NightsController < ApplicationController
     def create
         night = Night.create!(night_params)
         render json: night, status: :created
+    end
+
+    def destroy
+        night = Night.find(params[:id])
+        night.destroy
+        head :no_content
     end
 
     private

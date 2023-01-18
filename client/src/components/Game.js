@@ -15,7 +15,7 @@ import PopoutText from './PopoutText';
 import Penalty from './Penalty';
 
 
-const Game = ({ruleList, currentUser}) => {
+const Game = ({ruleList, currentUser, admin}) => {
     const [nightId, setNightId] = useState(null)
     const [players, setPlayers] = useState([])
     const {id} = useParams();
