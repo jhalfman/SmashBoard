@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
     skip_before_action :authenticate_user, only: [:show]
-    skip_before_action :is_admin
+    skip_before_action :is_admin, except: [:destroy]
 
     def show
         game = Game.find(params[:id])
@@ -21,7 +21,12 @@ class GamesController < ApplicationController
         pcg4 = PlayerCharacterGame.create!(player_character: pc4, game: game)
 
         render json: game, status: :ok
-        
+    end
+
+    def destroy
+        game = Game.find(params[:id])
+        game.destroy
+        head :no_content
     end
 
     private

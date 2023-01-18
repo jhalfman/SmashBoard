@@ -8,15 +8,21 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { NavLink as Link} from 'react-router-dom';
+import { NavLink as Link, useNavigate} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import PopoutText from './PopoutText';
 import Penalty from './Penalty';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 const Game = ({ruleList, currentUser, admin}) => {
     const [nightId, setNightId] = useState(null)
+    const [gameName, setgameName] = useState("")
     const [players, setPlayers] = useState([])
     const {id} = useParams();
     const [scoreboard, setScoreboard] = useState(null)
@@ -32,12 +38,24 @@ const Game = ({ruleList, currentUser, admin}) => {
     const [penalties, setPenalties] = useState([])
     const [currentPenalty, setCurrentPenalty] = useState(null)
     const [errors, setErrors] = useState(null)
+    const [open, setOpen] = React.useState(false)
+    let navigate = useNavigate()
+
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+      };
+    
 
     useEffect(() => {
         fetch(`/games/${id}`)
         .then(resp => resp.json())
         .then(game => {
             setNightId(game.night.id)
+            setgameName(game.notes)
             setPlayers(game.player_characters)
             
             const initialScore = {}
@@ -238,6 +256,52 @@ const Game = ({ruleList, currentUser, admin}) => {
         
     }
 
+    function deleteGame() {
+        fetch(`/games/${id}`, {
+            method: "DELETE"
+        })
+        .then(resp => {
+            if (resp.ok) {
+              navigate(`/nights/${nightId}`)
+            }
+            else {
+              resp.json().then(data => {
+                const errors = Object.entries(data.errors).map(e => `${e[0]} ${e[1]}`)
+                setErrors(errors)
+              })
+            }
+          })
+    }
+
+    const confirmationAlert = (
+        <div>
+          <Button variant="contained" color="error" onClick={handleClickOpen}>
+            Delete Night
+          </Button>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              Are you sure you want to delete game "{gameName}"?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+              This will also delete all associated penalties.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={() => {handleClose(); deleteGame()}} autoFocus>
+                Confirm
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )
+
       return (
         <>
         {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
@@ -245,12 +309,13 @@ const Game = ({ruleList, currentUser, admin}) => {
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
                 <TableRow>
-                    <TableCell>Super Smash Brothers Penalties</TableCell>
+                    <TableCell>Game: {gameName}</TableCell>
                     <TableCell><Link to={`/nights/${nightId}`}><Button variant="contained" color="success">Back to Game List</Button></Link></TableCell>
                     <TableCell>
                         <Button variant="contained" color="success" onClick={eventSelect}>Add Event</Button>
                         {eventSelectOn ? <Button variant="contained" color="error" onClick={() => cancelEventSelect()}>Cancel Event</Button> : null}
                     </TableCell>
+                    {admin ? <TableCell>{confirmationAlert}</TableCell> : null}
                     
                     {eventSelectOn ? <TableCell></TableCell> : null}
                     {eventSelectOn ? <TableCell>{currentPenaltySelected}</TableCell> : null}

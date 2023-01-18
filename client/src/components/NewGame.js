@@ -109,7 +109,7 @@ const NewGame = ({players , characters, currentNight}) => {
         <br></br>
         <br></br>
         <Button type="submit" variant="contained">Create</Button>
-        <Button type="button" variant="contained" onClick={() => navigate(`/nights/${currentNight}`)}>Back To Night</Button>
+        <Button type="button" variant="contained" color="error" onClick={() => navigate(`/nights/${currentNight}`)}>Back To Night</Button>
       </form>
     )
     
