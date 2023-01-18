@@ -59,7 +59,7 @@ const Player = ({player, setPlayers, players}) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({"retired": true, "name": `${player.name} (retired)`})
+            body: JSON.stringify({"retired": true})
         })
         .then(resp => {
             if (resp.ok) {

@@ -73,7 +73,7 @@ function App() {
         <Route path='/' element={<Home currentUser={currentUser}/>}/>
         <Route path='/login' element={<Login setCurrentUser={setCurrentUser}/>}/>
         <Route path='/user/new' element={<CreateUser setCurrentUser={setCurrentUser}/>}/>
-        <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer} errors={errors} setPlayers={setPlayers} admin={admin}/>}/>
+        <Route path='/players' element={<Players players={players} createNewPlayer={createNewPlayer} errors={errors} setPlayers={setPlayers} admin={admin} setErrors={setErrors}/>}/>
         <Route path='/nights' element={<NightsTable setNightName={setNightName}/>}/>
         <Route path='/nights/new' element={<CreateNight setNightName={setNightName}/>}/>
         <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight} ruleList={ruleList} nightName={nightName} setNightName={setNightName}/>}/>

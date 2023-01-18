@@ -4,15 +4,60 @@ import TextField from '@mui/material/TextField';
 import {useState} from 'react';
 import Player from './Player';
 
-const Players = ({players, createNewPlayer, errors, setPlayers, admin}) => {
+const Players = ({players, createNewPlayer, errors, setPlayers, admin, setErrors}) => {
     const [newPlayerForm, setNewPlayerForm] = useState({
         name: ""
     })
     const [showNewForm, setShowNewForm] = useState(false)
+    const [retiredPlayers, setRetiredPlayers] = useState(null)
+    const [viewRetiredOn, setViewRetiredOn] = useState(false)
 
     function updateNewPlayerForm(e) {
         setNewPlayerForm({name: e.target.value})
     }
+
+    function getRetiredPlayers() {
+        if (!retiredPlayers)
+        {fetch(`/players/retired`)
+        .then(resp => {
+            if (resp.ok) {
+                resp.json().then(players => setRetiredPlayers(players))
+            }
+            else {
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                    setErrors(errors)
+                  })
+            }
+        })}
+        setViewRetiredOn(true)
+    }
+
+    function unretirePlayer(id) {
+        fetch(`/players/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({"retired": false})
+        })
+        .then(resp => {
+            if (resp.ok) {
+                resp.json().then(player => {
+                    setPlayers([...players, player])
+                    const retired = retiredPlayers.filter(p => p.id !== player.id)
+                    setRetiredPlayers(retired)
+                })
+            }
+            else {
+                resp.json().then(data => {
+                    const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+                    setErrors(errors)
+                })
+            }
+        })
+    }
+
 
     return (
     <div>
@@ -31,7 +76,14 @@ const Players = ({players, createNewPlayer, errors, setPlayers, admin}) => {
         })}
         <br></br>
         <br></br>
-        {admin ? <button>View Retired Players</button> : null}
+        {admin ? <button onClick={getRetiredPlayers}>View Retired Players</button> : null}
+        {viewRetiredOn ? <button onClick={() => setViewRetiredOn(false)}>Cancel</button> : null}
+        {retiredPlayers && viewRetiredOn ? retiredPlayers.map(p => {
+            return <div key={p.name}>
+            {p.name[0].toUpperCase() + p.name.slice(1)}
+            <button onClick={() => unretirePlayer(p.id)}>Unretire</button>
+            </div>
+        }) : null}
     </div>
   )
 }

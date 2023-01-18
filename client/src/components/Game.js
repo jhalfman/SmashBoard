@@ -281,7 +281,9 @@ const Game = ({ruleList, currentUser}) => {
                     key={pc.player.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                        <TableCell component="th" scope="row" onClick={() => updatePlayer(pc)}>{`${pc.player.name} (${pc.character.name})`}</TableCell>
+                        <TableCell component="th" scope="row" onClick={() => updatePlayer(pc)}>
+                            {`${pc.player.name} ${pc.player.retired ? "(retired)" : ""} (${pc.character.name})`}
+                        </TableCell>
                         {scoreboard ? scoreboard[pc.id].map((tally, index1) => {
                             return <TableCell component="th" scope="row" key={index1}>{tally}</TableCell>
                         }) : null}
