@@ -68,7 +68,7 @@ const Night = ({setCurrentNight, ruleList}) => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <h2>
-              {nightName}
+              {nightName} Games
             </h2>
             <TableRow>
               <TableCell>Game Number</TableCell>

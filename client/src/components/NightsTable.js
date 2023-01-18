@@ -21,12 +21,14 @@ export default function NightsTable() {
         .then(data => setNights(data))
       }, [])
 
-  function createData(name, user, date, games, id) {
-    return { name, user, date, games, id};
+  function createData(name, user, date, time, games, id) {
+    return { name, user, date, time, games, id};
   }
   
   const nightRows = nights.map(night => {
-    return createData(night.name, night.user.username, night.created_at, night.games.length, night.id)
+    const parsedDate = night.created_at.split("T")
+    console.log(parsedDate[0], parsedDate[1].slice(0,8))
+    return createData(night.name, night.user.username, parsedDate[0], parsedDate[1].slice(0,8), night.games.length, night.id)
   })
 
   
@@ -54,7 +56,7 @@ export default function NightsTable() {
               <Link style={{color:"blue"}} to={`/nights/${row.id}`}>{row.name}</Link>
               </TableCell>
               <TableCell align="right">{row.user}</TableCell>
-              <TableCell align="right">{row.date}</TableCell>
+              <TableCell align="right">{row.date} @ {row.time}</TableCell>
               <TableCell align="right">{row.games}</TableCell>
             </TableRow>
           ))}
