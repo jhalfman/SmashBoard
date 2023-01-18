@@ -40,12 +40,13 @@ const Night = ({setCurrentNight}) => {
         })
     }, [id, setCurrentNight])
 
-    function createData(length, penalties, notes, id) {
-      return {length, penalties, notes, id};
+    function createData(length, penalties, notes, id, pcs) {
+      return {length, penalties, notes, id, pcs};
     }
     
     const gameRows = games.map(game => {
-      return createData(game.time, game.penalties.length, game.notes, game.id)
+      const pcs = game.player_characters.map(pc => pc.player.name)
+      return createData(game.time, game.penalties.length, game.notes, game.id, pcs)
     })
   
     
@@ -75,7 +76,10 @@ const Night = ({setCurrentNight}) => {
                 </TableCell>
                 <TableCell align="right">{`${row.length} minutes`}</TableCell>
                 <TableCell align="right">{row.penalties}</TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell align="right">{row.pcs.map((pc, index) => {
+                  if (index === 0) return pc
+                  else return ", " + pc
+                })}</TableCell>
               </TableRow>
             ))}
           </TableBody>
