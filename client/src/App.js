@@ -18,6 +18,7 @@ function App() {
   const [currentNight, setCurrentNight] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [nightName, setNightName] = useState("")
+  const [errors, setErrors] = useState(null)
   
   useEffect(() => {
     fetch('/users/:id')
@@ -49,16 +50,24 @@ function App() {
         },
         body: JSON.stringify(newPlayerForm)
     })
-    .then(resp => resp.json())
-    .then(data => {
-      console.log(data)
-        setPlayers([...players, data])
+    .then(resp => {
+      if (resp.ok) {
+        resp.json().then(data => {
+          setPlayers([...players, data])
+        })
+      }
+      else
+        resp.json().then(data => {
+          const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+          setErrors(errors)
+        })
     })
 }
 
   return (
     <div className="App">
       <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>
+      {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
       <Routes>
         <Route path='/' element={<Home currentUser={currentUser}/>}/>
         <Route path='/login' element={<Login setCurrentUser={setCurrentUser}/>}/>
