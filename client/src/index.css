@@ -33,3 +33,19 @@ a {
   color: red;
   font-size: 24px  
 }
+
+#newGameForm {
+  display: flex;
+}
+
+.playerForm {
+  width: 25%;
+}
+
+.playerTag {
+  width: 200px;
+}
+
+.characterName {
+  width: 200px;
+}

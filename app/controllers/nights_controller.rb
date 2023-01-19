@@ -3,7 +3,7 @@ class NightsController < ApplicationController
     skip_before_action :is_admin, except: [:destroy]
 
     def index
-        nights = Night.all
+        nights = Night.all.sort_by(&:created_at)
         render json: nights, status: :ok
     end
     

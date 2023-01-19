@@ -103,10 +103,10 @@ const Game = ({ruleList, currentUser, admin}) => {
         })
     }
 
-    function updatePenalty(name, id) {
+    function updatePenalty(name, id, image) {
         if (eventSelectOn) {
             setNewPenalty({...newPenalty, rule_id: id})
-            setCurrentPenaltySelected(name)
+            setCurrentPenaltySelected([name, image])
             if (currentPlayerSelected) {
                 setSubmitSelectOn(true)
             }
@@ -201,8 +201,8 @@ const Game = ({ruleList, currentUser, admin}) => {
 
     const penaltyDescriptionForm = (
         <form onSubmit={createNewPenalty}>
-            <TextField id="outlined-basic" label="Event Description" variant="outlined" onChange={updatePenaltyDescription} value={newPenalty.description}/>
-            <Button type="submit" variant="contained">Create</Button>
+            <TextField id="outlined-basic" label="Event Description" variant="outlined" onChange={updatePenaltyDescription} value={newPenalty.description} />
+            <Button type="submit" variant="contained" style={{height: 55}}>Create</Button>
         </form>
     )
 
@@ -372,17 +372,16 @@ const Game = ({ruleList, currentUser, admin}) => {
                     {admin ? <TableCell>{confirmationAlert}</TableCell> : null}
                     
                     {eventSelectOn ? <TableCell></TableCell> : null}
-                    {eventSelectOn ? <TableCell>{currentPenaltySelected}</TableCell> : null}
-                    {eventSelectOn ? <TableCell></TableCell> : null}
                     {eventSelectOn ? <TableCell>Choose a penalty and player</TableCell> : null}
                     {eventSelectOn ? <TableCell></TableCell> : null}
+                    {eventSelectOn ? <TableCell>{currentPenaltySelected[0]}<img style={{width: 40}} src={currentPenaltySelected[1]} alt={currentPenaltySelected[0]}></img></TableCell> : null}
                     {eventSelectOn ? <TableCell>{currentPlayerSelected}</TableCell> : null}
-                    {eventSelectOn ? <TableCell></TableCell> : null}
                     {submitSelectOn ? <TableCell>{penaltyDescriptionForm}</TableCell> : null}
                     
                     
 
                 </TableRow>
+                
               <TableRow>
               <TableCell><img alt="smash logo" id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
                 {ruleList.map(rule => {
@@ -394,7 +393,7 @@ const Game = ({ruleList, currentUser, admin}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-                {players.map((pc, index) => {
+                {players.map((pc) => {
                     return (
                     <TableRow
                     key={pc.player.name}
@@ -403,8 +402,8 @@ const Game = ({ruleList, currentUser, admin}) => {
                         <TableCell component="th" scope="row" onClick={() => updatePlayer(pc)}>
                             {`${pc.player.name} ${pc.player.retired ? "(retired)" : ""} (${pc.character.name})`}
                         </TableCell>
-                        {scoreboard ? scoreboard[pc.id].map((tally, index1) => {
-                            return <TableCell component="th" scope="row" key={index1}>{tally}</TableCell>
+                        {scoreboard ? scoreboard[pc.id].map((tally, index) => {
+                            return <TableCell component="th" scope="row" key={index}>{tally}</TableCell>
                         }) : null}
                     </TableRow>
                     )

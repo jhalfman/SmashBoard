@@ -168,7 +168,7 @@ const Night = ({setCurrentNight, ruleList, nightName, setNightName, admin, curre
     return (
       <div>
       <Link to="/games/new"><Button variant="contained" color="success">Add Game</Button></Link>
-      <Link to="/nights"><Button variant="contained" color="success">Back to Night List</Button></Link>
+      <Link to="/nights"><Button variant="contained" color="error">Back to Night List</Button></Link>
       {admin || currentUser ? <Button variant="contained" color="warning" onClick={() => setEditNightNameOn(true)}>Edit Night Name</Button> : null}
       {admin ? confirmationAlert : null}
       {errors ? errors.map(error => <div className="errors" key={error}>{error}</div>) : null}

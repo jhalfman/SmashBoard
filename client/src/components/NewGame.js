@@ -65,7 +65,7 @@ const NewGame = ({players , characters, currentNight}) => {
       const playerArray = ["p1", "p2", "p3", "p4"]
       return playerArray.map(player => {
         return (
-          <React.Fragment key={player}>
+          <div key={player} className="playerForm">
           <h3>{`Player ${player[1]}`}</h3>
           <InputLabel id={`${player}p-select-label`}>Player Tag</InputLabel>
           <Select
@@ -75,6 +75,7 @@ const NewGame = ({players , characters, currentNight}) => {
             label="Player"
             value={newGameForm[`${player}p`] || ""}
             onChange={updatePlayerCharacters}
+            className="playerTag"
           >
           {players.map(player => {
             return <MenuItem key={player.id} value={player.id}>{player.name}</MenuItem>
@@ -88,12 +89,13 @@ const NewGame = ({players , characters, currentNight}) => {
             label="Character"
             value={newGameForm[`${player}c`] || ""}
             onChange={updatePlayerCharacters}
+            className="characterName"
           >
             {characters.map(character => {
               return <MenuItem key={character.id} value={character.id}>{character.name}</MenuItem>
             })}
           </Select>
-          </React.Fragment>
+          </div>
         )
       })
     }
@@ -105,10 +107,10 @@ const NewGame = ({players , characters, currentNight}) => {
         <TextField type="number" label="Time Limit (minutes)" variant="outlined" onChange={updateGameTime} value={newGameForm.time}/>
         <br></br>
         <br></br>
-        {createFormOptions()}
+        {<div id="newGameForm">{createFormOptions()}</div>}
         <br></br>
         <br></br>
-        <Button type="submit" variant="contained">Create</Button>
+        <Button type="submit" variant="contained" color="success">Create</Button>
         <Button type="button" variant="contained" color="error" onClick={() => navigate(`/nights/${currentNight}`)}>Back To Night</Button>
       </form>
     )
