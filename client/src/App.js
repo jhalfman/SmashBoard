@@ -30,7 +30,9 @@ function App() {
         resp.json().then(user => {setCurrentUser(user); setAdmin(user.admin)})
       }
     })
+  }, [currentUser])
 
+  useEffect(() => {
     fetch(`/rules`)
     .then(resp => resp.json())
     .then(rules => setRuleList(rules))

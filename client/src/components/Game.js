@@ -324,7 +324,7 @@ const Game = ({ruleList, currentUser, admin}) => {
     const confirmationAlert = (
         <div>
           <Button variant="contained" color="error" onClick={handleClickOpen}>
-            Delete Night
+            Delete Game
           </Button>
           <Dialog
             open={open}
