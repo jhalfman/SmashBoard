@@ -30,9 +30,7 @@ function App() {
         resp.json().then(user => {setCurrentUser(user); setAdmin(user.admin)})
       }
     })
-  }, [currentUser])
 
-  useEffect(() => {
     fetch(`/rules`)
     .then(resp => resp.json())
     .then(rules => setRuleList(rules))
@@ -72,7 +70,7 @@ function App() {
 
   return (
     <div className="App">
-      <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>
+      <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser} setAdmin={setAdmin}/>
       <Routes>
         <Route path='/' element={<Home currentUser={currentUser}/>}/>
         <Route path='/login' element={<Login setCurrentUser={setCurrentUser} setAdmin={setAdmin}/>}/>

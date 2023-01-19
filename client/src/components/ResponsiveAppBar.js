@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
-function ResponsiveAppBar({setCurrentUser, currentUser}) {
+function ResponsiveAppBar({setCurrentUser, currentUser, setAdmin}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   let navigate = useNavigate();
 
@@ -33,6 +33,7 @@ function ResponsiveAppBar({setCurrentUser, currentUser}) {
       method: "DELETE"
     })
     setCurrentUser(null)
+    setAdmin(false)
     navigate(`/`)
   }
 
