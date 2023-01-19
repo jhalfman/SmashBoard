@@ -19,7 +19,6 @@ const Stats = ({ruleList}) => {
         fetch(`/stats`)
         .then(resp => resp.json())
         .then(players => {
-            console.log(players)
             setPlayers(players)
 
             const newStatboard = {}
