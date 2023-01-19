@@ -10,6 +10,7 @@ import NewGame from './components/NewGame';
 import Players from './components/Players';
 import Login from './components/Login';
 import CreateUser from './components/CreateUser';
+import Stats from './components/Stats';
 
 function App() {
   const [ruleList, setRuleList] = useState([])
@@ -79,6 +80,7 @@ function App() {
         <Route path='/nights/:id' element={<Night setCurrentNight={setCurrentNight} ruleList={ruleList} nightName={nightName} setNightName={setNightName} admin={admin} currentUser={currentUser}/>}/>
         <Route path='/games/new' element={<NewGame players={players} characters={characters} currentNight={currentNight}/>}/>
         <Route path='/games/:id' element={<Game ruleList={ruleList} currentUser={currentUser} admin={admin}/>}/>
+        <Route path='/stats' element={<Stats />}/>
       </Routes>
       
     </div>

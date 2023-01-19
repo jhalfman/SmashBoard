@@ -112,6 +112,11 @@ function ResponsiveAppBar({setCurrentUser, currentUser}) {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}>Nights</Button>
             </Link>
+            <Link to="/stats">
+                <Button variant="contained"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}>Stats</Button>
+            </Link>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

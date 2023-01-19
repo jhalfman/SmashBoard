@@ -1,7 +1,7 @@
 import React from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -23,6 +23,12 @@ const NewGame = ({players , characters, currentNight}) => {
     })
     const [errors, setErrors] = useState(null)
     let navigate = useNavigate();
+
+    useEffect(() => {
+      if (currentNight.length === 0) {
+        navigate(`/nights`)
+      }
+    })
 
     function updateGameNotes(e) {
       setNewGameForm({...newGameForm, notes: e.target.value})

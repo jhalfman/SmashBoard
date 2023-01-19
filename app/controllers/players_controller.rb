@@ -23,6 +23,11 @@ class PlayersController < ApplicationController
         render json: players, status: :ok
     end
 
+    def stats
+        players = Player.all
+        render json: players, include: ["characters", "player_characters", "player_characters.penalties", "player_characters.player_character_games"], status: :ok
+    end
+
     private
 
     def player_params
