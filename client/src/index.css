@@ -49,3 +49,7 @@ a {
 .characterName {
   width: 200px;
 }
+
+.statCell {
+  border-style: solid
+}

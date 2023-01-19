@@ -7,13 +7,13 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :show]
   resources :rules, only: [:index]
   resources :player_characters, only: [:index]
-  resources :players, only: [:index, :create, :update]
+  resources :players, only: [:index, :create, :update, :show]
   resources :characters, only: [:index]
 
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
   get "/players/retired", to: "players#retired"
-  get "/players/stats", to: "players#stats"
+  get "/stats", to: "players#stats"
 
   # Routing logic: fallback requests for React Router.
   # Leave this here to help deploy your app later!

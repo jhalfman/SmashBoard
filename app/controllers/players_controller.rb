@@ -1,6 +1,6 @@
 class PlayersController < ApplicationController
-    skip_before_action :authenticate_user, only: [:index, :update]
-    before_action :is_admin, only: [:update, :retired]
+    skip_before_action :authenticate_user, only: [:index, :update, :stats, :show]
+    before_action :is_admin, only: [:update, :retired, :stats, :show]
 
     def index
         players = Player.where('retired': false)
@@ -16,6 +16,11 @@ class PlayersController < ApplicationController
         player = Player.find(params[:id])
         player.update!(player_params)
         render json: player, include: ["player_characters", "player_characters.player_character_games"], status: :ok
+    end
+
+    def show
+        player = Player.find(params[:id])
+        render json: player, include: ["characters", "player_characters", "player_characters.penalties", "player_characters.player_character_games", "player_characters.character"], status: :ok
     end
 
     def retired
