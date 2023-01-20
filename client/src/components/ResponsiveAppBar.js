@@ -13,7 +13,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink as Link} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['Players', 'Nights', 'Stats'];
 
 function ResponsiveAppBar({setCurrentUser, currentUser, setAdmin}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -33,6 +33,7 @@ function ResponsiveAppBar({setCurrentUser, currentUser, setAdmin}) {
       method: "DELETE"
     })
     setCurrentUser(null)
+    //use context?
     setAdmin(false)
     navigate(`/`)
   }
@@ -77,7 +78,7 @@ function ResponsiveAppBar({setCurrentUser, currentUser, setAdmin}) {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => {handleCloseNavMenu(); navigate(`/${page.toLowerCase()}`)}}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
