@@ -357,31 +357,31 @@ const Game = ({ruleList, currentUser, admin}) => {
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
                 <TableRow>
-                    {editGameOn ? <TableCell><form onSubmit={updateGameInfo}>
+                    {editGameOn ? <TableCell style={{width: 100}}><form onSubmit={updateGameInfo}>
                         Game: <input name="notes" type="text" value={editGameForm.notes} onChange={editGame}></input>
                         Time: <input name="time" type="number" value={editGameForm.time} onChange={editGame}></input>
                         <button>submit</button>
                         <button type='button' onClick={() => {setEditGameOn(false); setEditGameForm({notes: gameName, time: gameTime})}}>cancel</button>
-                    </form></TableCell> : <TableCell>Game: {gameName} <hr></hr> Time: {gameTime} minutes</TableCell>}
-                    <TableCell><Link to={`/nights/${nightId}`}><Button variant="contained" color="success">Back to Game List</Button></Link></TableCell>
-                    <TableCell>
-                        <Button variant="contained" color="success" onClick={eventSelect}>Add Event</Button>
+                    </form></TableCell> : <TableCell style={{width: 150}}>Game: {gameName} <hr></hr> Time: {gameTime} minutes</TableCell>}
+                    <TableCell style={{width: 100}}><Link to={`/nights/${nightId}`}><Button variant="contained" color="secondary">Back to Game List</Button></Link></TableCell>
+                    <TableCell style={{width: 100}}>
+                        <Button variant="contained" color="success" onClick={eventSelect} style={{width: 100}}>Add Event</Button>
                         {eventSelectOn ? <Button variant="contained" color="error" onClick={() => cancelEventSelect()}>Cancel Event</Button> : null}
                     </TableCell>
-                    {admin || currentUser ? <TableCell><Button variant="contained" color="warning" onClick={() => setEditGameOn(true)}>Edit Game</Button></TableCell> : null}
-                    {admin ? <TableCell>{confirmationAlert}</TableCell> : null}
-                    
-                    {eventSelectOn ? <TableCell></TableCell> : null}
-                    {eventSelectOn ? <TableCell>Choose a penalty and player</TableCell> : null}
-                    {eventSelectOn ? <TableCell></TableCell> : null}
-                    {eventSelectOn ? <TableCell>{currentPenaltySelected[0]}<img style={{width: 40}} src={currentPenaltySelected[1]} alt={currentPenaltySelected[0]}></img></TableCell> : null}
+                    {admin || currentUser ? <TableCell style={{width: 100}}><Button variant="contained" color="warning" onClick={() => setEditGameOn(true)}>Edit Game</Button></TableCell> : <TableCell style={{width: 40}}></TableCell>}
+                    {admin ? <TableCell style={{width: 100}}>{confirmationAlert}</TableCell> : null}
+                    {eventSelectOn ? <TableCell style={{width: 100}}>Choose a penalty and player</TableCell> : <TableCell></TableCell>}
+                    {eventSelectOn ? <TableCell style={{width: 40}}>{currentPenaltySelected[0]}<img style={{width: "80px"}} src={currentPenaltySelected[1]} alt={currentPenaltySelected[0]}></img></TableCell> : null}
                     {eventSelectOn ? <TableCell>{currentPlayerSelected}</TableCell> : null}
                     {submitSelectOn ? <TableCell>{penaltyDescriptionForm}</TableCell> : null}
-                    
-                    
-
                 </TableRow>
-                
+            </TableHead>
+          </Table>
+        </TableContainer>
+
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+            <TableHead>      
               <TableRow>
               <TableCell><img alt="smash logo" id="smashLogo" src="https://i.imgur.com/Ovx4ThS.png"/></TableCell>
                 {ruleList.map(rule => {
@@ -400,7 +400,7 @@ const Game = ({ruleList, currentUser, admin}) => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                         <TableCell component="th" scope="row" onClick={() => updatePlayer(pc)}>
-                            {`${pc.player.name} ${pc.player.retired ? "(retired)" : ""} (${pc.character.name})`}
+                            {eventSelectOn ? <button>{`${pc.player.name} ${pc.player.retired ? "(retired)" : ""} (${pc.character.name})`}</button> : `${pc.player.name} ${pc.player.retired ? "(retired)" : ""} (${pc.character.name})`}
                         </TableCell>
                         {scoreboard ? scoreboard[pc.id].map((tally, index) => {
                             return <TableCell component="th" scope="row" key={index}>{tally}</TableCell>
