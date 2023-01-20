@@ -401,9 +401,11 @@ const Game = ({ruleList, currentUser, admin}) => {
                     </TableCell>
                     {admin || currentUser ? <TableCell style={{width: 100}}><Button variant="contained" color="warning" onClick={() => setEditGameOn(true)}>Edit Game</Button></TableCell> : <TableCell style={{width: 40}}></TableCell>}
                     {admin ? <TableCell style={{width: 100}}>{confirmationAlert}</TableCell> : null}
-                    {eventSelectOn ? <TableCell style={{width: 100}}>Choose a penalty and player</TableCell> : <TableCell></TableCell>}
-                    {eventSelectOn ? <TableCell style={{width: 40}}>{currentPenaltySelected[0]}<img style={{width: "80px"}} src={currentPenaltySelected[1]} alt={currentPenaltySelected[0]}></img></TableCell> : null}
-                    {eventSelectOn ? <TableCell>{currentPlayerSelected}</TableCell> : null}
+                    {eventSelectOn ? <TableCell style={{width: 10}}></TableCell> : null}
+                    {eventSelectOn ? <TableCell style={{width: 100, "font-weight": "900"}}>Choose a penalty and player</TableCell> : <TableCell></TableCell>}
+                    {eventSelectOn ? <TableCell style={{width: 10}}></TableCell> : null}
+                    {eventSelectOn ? <TableCell style={{width: 100, "font-weight": "900"}}>{currentPenaltySelected[0]}<img style={{width: "70px"}} src={currentPenaltySelected[1]} alt={currentPenaltySelected[0]}></img></TableCell> : null}
+                    {eventSelectOn ? <TableCell style={{"font-weight": "900"}}>{currentPlayerSelected}</TableCell> : null}
                     {submitSelectOn ? <TableCell>{penaltyDescriptionForm}</TableCell> : null}
                 </TableRow>
             </TableHead>

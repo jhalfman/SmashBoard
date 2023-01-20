@@ -33,7 +33,7 @@ function App() {
 
     fetch(`/rules`)
     .then(resp => resp.json())
-    .then(rules => setRuleList(rules))
+    .then(rules => setRuleList(rules.sort(function(x, y) {return x.id - y.id})))
 
     fetch(`/players`)
     .then(resp => resp.json())
