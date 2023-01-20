@@ -1,6 +1,6 @@
 class PlayersController < ApplicationController
     skip_before_action :authenticate_user, only: [:index, :update, :stats, :show]
-    before_action :is_admin, only: [:update, :retired, :show]
+    before_action :is_admin, only: [:update, :retired]
 
     def index
         players = Player.where('retired': false)
