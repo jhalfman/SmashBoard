@@ -13,4 +13,4 @@
 # Rule.find(2).update(image: "https://i.imgur.com/MlXJMJW.jpg")
 # Rule.find(14).update(image: "https://i.imgur.com/a9HkEut.jpg")
 # Rule.find(15).update(image: "https://i.imgur.com/crxIqoa.jpg")
-User.where(username: "Tr3").first.update(admin: true)
+User.where(username: "tr3").first.update(admin: true)
