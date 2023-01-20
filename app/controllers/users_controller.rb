@@ -13,10 +13,34 @@ class UsersController < ApplicationController
         render json: currentUser, status: :ok
     end
 
+    def index
+        if is_username_admin
+            users = User.all
+            render json: users, status: :ok
+        else
+            render json:{errors: {user: "unauthorized user"}}, status: :unauthorized
+        end
+    end
+
+    def update
+        if is_username_admin
+            user = User.find(params[:id])
+            user.update(user_params)
+            render json: user, status: :ok
+        else
+            render json:{errors: {user: "unauthorized user"}}, status: :unauthorized
+        end
+    end
+
     private
 
     def user_params
         params.permit(:username, :password, :admin)
+    end
+
+    def is_username_admin
+        currentUser = User.find(session[:user_id])
+        currentUser.username == "admin"
     end
 
 end

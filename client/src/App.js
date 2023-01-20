@@ -22,6 +22,7 @@ function App() {
   const [nightName, setNightName] = useState("")
   const [errors, setErrors] = useState(null)
   const [admin, setAdmin] = useState(false)
+  const [users, setUsers] = useState(null)
   
   useEffect(() => {
     fetch('/users/:id')
@@ -68,6 +69,42 @@ function App() {
     })
 }
 
+function updateUsers() {
+  fetch(`/users`)
+  .then(resp => {
+    if (resp.ok) {
+      resp.json().then(users => {
+        setUsers(users)
+        setErrors(null)
+      })
+    }
+    else
+      resp.json().then(data => {
+        const errors = Object.entries(data.errors).map(error => `${error[0]} ${error[1]}`)
+        setErrors(errors)
+      })
+  })
+}
+
+function changeAdmin(user) {
+  fetch(`/users/${user.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({"admin": !user.admin})
+  })
+  .then(resp => resp.json()).then(data => {
+    const updatedUsers = users.map(user => {
+      if (user.id === data.id) {
+        return data
+      }
+      else return user
+    })
+    setUsers(updatedUsers)
+  })
+}
+
   return (
     <div className="App">
       <ResponsiveAppBar currentUser={currentUser} setCurrentUser={setCurrentUser} setAdmin={setAdmin}/>
@@ -84,6 +121,13 @@ function App() {
         <Route path='/stats' element={<Stats ruleList={ruleList}/>}/>
         <Route path='/stats/:id' element={<PlayerStats ruleList={ruleList}/>}/>
       </Routes>
+
+      {currentUser ? ((currentUser.username === "admin") ? 
+        <button onClick={updateUsers}>show users</button> : null) 
+       : null}
+       {currentUser ? ((currentUser.username === "admin" && users) ? users.map(user => {
+        return <div key={user.username}>{user.username} -- admin: {user.admin ? "true" : "false"} -- <button onClick={() => changeAdmin(user)}>change admin status</button></div>}) : null)
+        : null}
       
     </div>
   );

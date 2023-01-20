@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :player_character_games, only: []
   resources :games, only: [:show, :create, :destroy, :update]
   resources :nights, only: [:index, :show, :create, :destroy, :update]
-  resources :users, only: [:create, :show]
+  resources :users, only: [:create, :show, :index, :update]
   resources :rules, only: [:index]
   resources :player_characters, only: [:index]
   resources :players, only: [:index, :create, :update, :show]
