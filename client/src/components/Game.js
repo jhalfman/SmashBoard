@@ -133,6 +133,9 @@ const Game = ({ruleList, currentUser, admin}) => {
         if (newPenalty.rule_id === 2) {
             screenClear()
         }
+        else if (newPenalty.rule_id === 8) {
+            mew()
+        }
         else regularPenalty();
         cancelEventSelect()
     }
@@ -193,6 +196,34 @@ const Game = ({ruleList, currentUser, admin}) => {
                 setScoreboard({...newScoreboard})
                 newPenaltyList.push(penalty)
                 if (newPenaltyList.length === screenClearPlayers.length) {
+                    setPenalties([...penalties, ...newPenaltyList])
+                }
+            })       
+        })      
+    }
+
+    function mew() {
+        const newPenaltyList = []
+        const mewPlayers = players.filter(player => player.id!== newPenalty.player_character_id)
+        mewPlayers.forEach(player => {
+            const mewForm = {
+                ...newPenalty, "game_id": id, "user_id": currentUser.id, player_character_id: player.id
+            }
+            fetch(`/penalties`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(mewForm)
+            })
+            .then(resp => resp.json())
+            .then(penalty => {
+                const newScoreboard = {...scoreboard}
+                newScoreboard[penalty.player_character_id][penalty.rule_id - 1] += 1
+                newScoreboard[penalty.player_character_id][17] += 1
+                setScoreboard({...newScoreboard})
+                newPenaltyList.push(penalty)
+                if (newPenaltyList.length === mewPlayers.length) {
                     setPenalties([...penalties, ...newPenaltyList])
                 }
             })       

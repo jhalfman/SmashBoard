@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import {useState} from 'react';
 import Player from './Player';
 
-const Players = ({players, createNewPlayer, errors, setPlayers, admin, setErrors}) => {
+const Players = ({players, createNewPlayer, errors, setPlayers, admin, setErrors, currentUser}) => {
     const [newPlayerForm, setNewPlayerForm] = useState({
         name: ""
     })
@@ -61,7 +61,7 @@ const Players = ({players, createNewPlayer, errors, setPlayers, admin, setErrors
 
     return (
     <div>
-        {errors ? errors.map(error => <div className="errors" >{error}</div>) : null}
+        {errors && !currentUser ? errors.map(error => <div className="errors" >{error}</div>) : null}
         <br></br>
         <Button variant="contained" color="success" onClick={() => setShowNewForm(!showNewForm)}>Add Player Tag</Button>
         <br></br>
