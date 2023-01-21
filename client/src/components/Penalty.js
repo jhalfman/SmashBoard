@@ -43,7 +43,7 @@ const Penalty = ({penalty, players, ruleList, submitPenaltyForm, deletePenalty, 
 
     const penaltyDiv = <div>
         <p>Rule: {ruleName} -- Player: {playerName} ({characterName}) -- {penalty.description}</p>
-        <p>{penalty.created_at.split("T")[0]} @ {penalty.created_at.split("T")[1].slice(0,8)}  <button onClick={() => {setPenaltyEditorOn(true); setCurrentPenalty(penalty.id)}}>EDIT</button></p>
+        <p>{penalty.created_at.split("T")[0]} @ {penalty.created_at.split("T")[1].slice(0,8)} by {penalty.user.username} <button onClick={() => {setPenaltyEditorOn(true); setCurrentPenalty(penalty.id)}}>EDIT</button></p>
         <hr></hr>
     </div>
 

@@ -60,6 +60,7 @@ const Game = ({ruleList, currentUser, admin}) => {
         fetch(`/games/${id}`)
         .then(resp => resp.json())
         .then(game => {
+            console.log(game)
             setNightId(game.night.id)
             setgameName(game.notes)
             setGameTime(game.time)
